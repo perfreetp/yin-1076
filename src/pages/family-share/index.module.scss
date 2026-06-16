@@ -24,6 +24,216 @@
   }
 }
 
+.companionSection {
+  @include ivf-card;
+  margin-bottom: $spacing-lg;
+  padding: $spacing-lg;
+}
+
+.sectionHeader {
+  margin-bottom: $spacing-md;
+}
+
+.sectionSubtitle {
+  font-size: $font-size-sm;
+  color: $color-text-tertiary;
+  margin-top: 4rpx;
+  display: block;
+}
+
+.companionGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: $spacing-md;
+  margin-bottom: $spacing-lg;
+}
+
+.companionCard {
+  padding: $spacing-md;
+  background: $color-bg-page;
+  border-radius: $radius-md;
+  transition: all $transition-fast;
+  position: relative;
+
+  &.locked {
+    opacity: 0.6;
+  }
+
+  &:active {
+    transform: scale(0.98);
+    background: $color-bg-hover;
+  }
+
+  &.todayTaskCard {
+    background: linear-gradient(135deg, rgba($color-primary, 0.1) 0%, rgba($color-secondary, 0.1) 100%);
+  }
+
+  &.expenseCard {
+    background: linear-gradient(135deg, rgba($color-secondary, 0.1) 0%, rgba($color-accent, 0.1) 100%);
+  }
+
+  &.abnormalCard {
+    background: linear-gradient(135deg, rgba(255, 77, 79, 0.1) 0%, rgba(250, 173, 20, 0.1) 100%);
+  }
+
+  &.questionCard {
+    background: linear-gradient(135deg, rgba(74, 144, 217, 0.1) 0%, rgba(114, 46, 209, 0.1) 100%);
+  }
+}
+
+.cardHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: $spacing-sm;
+}
+
+.cardIcon {
+  font-size: 40rpx;
+  line-height: 1;
+}
+
+.cardBadge {
+  min-width: 36rpx;
+  height: 36rpx;
+  padding: 0 10rpx;
+  background: $color-error;
+  color: $color-text-white;
+  border-radius: $radius-round;
+  font-size: $font-size-xs;
+  @include flex-center;
+}
+
+.cardWarnBadge {
+  min-width: 36rpx;
+  height: 36rpx;
+  padding: 0 10rpx;
+  background: #FAAD14;
+  color: $color-text-white;
+  border-radius: $radius-round;
+  font-size: $font-size-xs;
+  @include flex-center;
+}
+
+.cardTitle {
+  font-size: $font-size-md;
+  font-weight: $font-weight-semibold;
+  color: $color-text-primary;
+  margin-bottom: 4rpx;
+}
+
+.cardDesc {
+  font-size: $font-size-sm;
+  color: $color-text-secondary;
+}
+
+.cardAmount {
+  font-size: $font-size-lg;
+  font-weight: $font-weight-bold;
+  color: $color-secondary;
+  margin-bottom: 4rpx;
+}
+
+.cardLocked {
+  font-size: $font-size-sm;
+  color: $color-text-tertiary;
+}
+
+.recentAbnormal,
+.recentQuestions {
+  padding-top: $spacing-md;
+  border-top: 2rpx solid $color-border;
+}
+
+.recentTitle {
+  font-size: $font-size-sm;
+  font-weight: $font-weight-semibold;
+  color: $color-text-primary;
+  margin-bottom: $spacing-sm;
+}
+
+.abnormalMini {
+  padding: $spacing-sm $spacing-md;
+  background: rgba(255, 77, 79, 0.05);
+  border-radius: $radius-sm;
+  margin-bottom: $spacing-sm;
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+}
+
+.abnormalMiniHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: $spacing-xs;
+}
+
+.abnormalMiniType {
+  font-size: $font-size-sm;
+  font-weight: $font-weight-medium;
+
+  &.mild { color: #52C41A; }
+  &.moderate { color: #FAAD14; }
+  &.severe { color: #FF4D4F; }
+}
+
+.abnormalMiniDate {
+  font-size: $font-size-xs;
+  color: $color-text-tertiary;
+}
+
+.abnormalMiniDesc {
+  font-size: $font-size-sm;
+  color: $color-text-secondary;
+  line-height: $line-height-normal;
+  margin-bottom: $spacing-xs;
+}
+
+.abnormalMiniSuggestion {
+  padding: $spacing-xs $spacing-sm;
+  background: rgba(82, 196, 26, 0.1);
+  border-radius: $radius-xs;
+}
+
+.suggestionLabel {
+  font-size: $font-size-xs;
+  font-weight: $font-weight-semibold;
+  color: #52C41A;
+}
+
+.suggestionText {
+  font-size: $font-size-xs;
+  color: $color-text-secondary;
+  line-height: $line-height-normal;
+}
+
+.questionMini {
+  padding: $spacing-sm $spacing-md;
+  background: rgba(74, 144, 217, 0.05);
+  border-radius: $radius-sm;
+  margin-bottom: $spacing-sm;
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+}
+
+.questionMiniText {
+  font-size: $font-size-sm;
+  color: $color-text-primary;
+  font-weight: $font-weight-medium;
+  margin-bottom: $spacing-xs;
+  line-height: $line-height-normal;
+}
+
+.answerMiniText {
+  font-size: $font-size-sm;
+  color: $color-text-secondary;
+  line-height: $line-height-normal;
+}
+
 .membersSection {
   @include ivf-card;
   margin-bottom: $spacing-lg;
@@ -324,6 +534,15 @@
   margin-bottom: $spacing-lg;
 }
 
+.permissionTip {
+  font-size: $font-size-sm;
+  color: $color-text-secondary;
+  margin-bottom: $spacing-md;
+  padding: $spacing-sm $spacing-md;
+  background: rgba(250, 173, 20, 0.1);
+  border-radius: $radius-sm;
+}
+
 .permissionList {
   display: flex;
   flex-direction: column;
@@ -345,10 +564,24 @@
   flex: 1;
 }
 
+.permissionNameRow {
+  display: flex;
+  align-items: center;
+  gap: $spacing-xs;
+  margin-bottom: 4rpx;
+}
+
 .permissionName {
   font-size: $font-size-md;
   color: $color-text-primary;
-  margin-bottom: 4rpx;
+}
+
+.sensitiveTag {
+  font-size: 20rpx;
+  padding: 2rpx 10rpx;
+  background: rgba(250, 173, 20, 0.2);
+  color: #FAAD14;
+  border-radius: $radius-xs;
 }
 
 .permissionDesc {

@@ -1,36 +1,78 @@
 import React, { useState, useCallback } from 'react';
 import { View, Text, ScrollView, Button } from '@tarojs/components';
 import Taro from '@tarojs/taro';
-import { usePullDownRefresh } from '@tarojs/taro';
+import { usePullDownRefresh, useDidShow } from '@tarojs/taro';
 import Timeline from '@/components/Timeline';
 import TaskItemComponent from '@/components/TaskItem';
 import ProgressBar from '@/components/ProgressBar';
-import type { TaskItem } from '@/types/ivf';
-import { 
-  treatmentOverview, 
-  timelineNodes, 
-  todayTasks, 
-  phaseList, 
+import type { TaskItem, PhaseInfo } from '@/types/ivf';
+import {
+  treatmentOverview,
+  timelineNodes,
+  todayTasks,
+  phaseList,
   contraindications,
   familyMembers
 } from '@/data/treatment';
 import { getRelativeDate, formatDate } from '@/utils/date';
+import { storage } from '@/utils/storage';
+import { expenseRecords as defaultExpenses, medications as defaultMedications } from '@/data/medical';
+import { abnormalFlags as defaultAbnormal, questionCards as defaultQuestions } from '@/data/health';
 import styles from './index.module.scss';
 
 const HomePage: React.FC = () => {
   const [tasks, setTasks] = useState<TaskItem[]>(todayTasks);
   const [refreshing, setRefreshing] = useState(false);
-  
+  const [expandedPhase, setExpandedPhase] = useState<string | null>(() => {
+    const current = phaseList.find(p => p.status === 'current');
+    return current ? current.id : null;
+  });
+
   const currentPhase = phaseList.find(p => p.status === 'current');
-  
+
+  const refreshData = useCallback(() => {
+    storage.getMedications(defaultMedications);
+    storage.getExpenses(defaultExpenses);
+    storage.getAbnormalFlags(defaultAbnormal);
+    storage.getQuestions(defaultQuestions);
+  }, []);
+
+  useDidShow(() => {
+    refreshData();
+  });
+
   usePullDownRefresh(() => {
     setRefreshing(true);
+    refreshData();
     setTimeout(() => {
       setRefreshing(false);
       Taro.stopPullDownRefresh();
       Taro.showToast({ title: '刷新成功', icon: 'success' });
     }, 1000);
   });
+
+  const togglePhase = useCallback((phaseId: string) => {
+    setExpandedPhase(prev => prev === phaseId ? null : phaseId);
+  }, []);
+
+  const handlePhaseClick = useCallback((phase: PhaseInfo) => {
+    const phaseToPage: Record<string, string> = {
+      initial: '/pages/medical/index?tab=examination',
+      examination: '/pages/medical/index?tab=examination',
+      stimulation: '/pages/medication-detail/index',
+      retrieval: '/pages/calendar/index',
+      transfer: '/pages/calendar/index',
+      pregnancy_test: '/pages/pregnancy-test/index'
+    };
+    const page = phaseToPage[phase.phase];
+    if (page) {
+      if (page.includes('tab=')) {
+        Taro.switchTab({ url: page.split('?')[0] });
+      } else {
+        Taro.navigateTo({ url: page });
+      }
+    }
+  }, []);
   
   const handleTaskComplete = useCallback((id: string) => {
     setTasks(prev => prev.map(task => 
@@ -180,18 +222,113 @@ const HomePage: React.FC = () => {
         ))}
       </View>
       
-      <View className={styles.timelineCard}>
+      <View className={styles.phasesCard}>
         <View className={styles.sectionHeader}>
-          <Text className={styles.sectionTitle}>疗程时间线</Text>
-          <Text 
+          <Text className={styles.sectionTitle}>疗程阶段看板</Text>
+          <Text
             className={styles.sectionAction}
             onClick={() => Taro.switchTab({ url: '/pages/calendar/index' })}
           >
-            查看全部
+            日历详情
           </Text>
         </View>
-        
-        <Timeline nodes={timelineNodes} />
+
+        <View className={styles.phasesList}>
+          {phaseList.map((phase, index) => (
+            <View
+              key={phase.id}
+              className={`${styles.phaseItem} ${styles[phase.status]} ${expandedPhase === phase.id ? styles.expanded : ''}`}
+            >
+              <View
+                className={styles.phaseHeader}
+                onClick={() => togglePhase(phase.id)}
+              >
+                <View className={styles.phaseLeft}>
+                  <View
+                    className={styles.phaseCircle}
+                    style={{ background: phase.color }}
+                  >
+                    {phase.status === 'completed' ? '✓' : index + 1}
+                  </View>
+                  <View className={styles.phaseInfo}>
+                    <Text className={styles.phaseName}>{phase.name}</Text>
+                    <Text className={styles.phaseDate}>
+                      {phase.startDate} ~ {phase.endDate}
+                    </Text>
+                  </View>
+                </View>
+                <View className={styles.phaseRight}>
+                  {phase.status === 'current' && (
+                    <View className={styles.phaseProgress}>
+                      <Text className={styles.phaseProgressText}>{phase.progress}%</Text>
+                    </View>
+                  )}
+                  <Text className={styles.phaseArrow}>
+                    {expandedPhase === phase.id ? '▲' : '▼'}
+                  </Text>
+                </View>
+              </View>
+
+              {expandedPhase === phase.id && (
+                <View className={styles.phaseDetail}>
+                  <View className={styles.phaseDesc}>
+                    <Text>{phase.description}</Text>
+                  </View>
+
+                  <View className={styles.phaseProgressBar}>
+                    <View className={styles.phaseProgressLabel}>
+                      <Text>阶段进度</Text>
+                      <Text>{phase.progress}%</Text>
+                    </View>
+                    <View className={styles.phaseProgressTrack}>
+                      <View
+                        className={styles.phaseProgressFill}
+                        style={{
+                          width: `${phase.progress}%`,
+                          background: phase.color
+                        }}
+                      />
+                    </View>
+                  </View>
+
+                  {phase.status === 'current' && (
+                    <View className={styles.nextStepCard}>
+                      <Text className={styles.nextStepTitle}>🔔 下一步提醒</Text>
+                      <Text className={styles.nextStepText}>
+                        {phase.phase === 'stimulation'
+                          ? '继续按时用药，下次B超监测卵泡发育'
+                          : phase.phase === 'transfer'
+                          ? '请提前憋尿，移植当天需家属陪同'
+                          : '请遵医嘱做好准备'}
+                      </Text>
+                    </View>
+                  )}
+
+                  <View className={styles.phaseTips}>
+                    <Text className={styles.phaseTipsTitle}>💡 阶段注意事项</Text>
+                    {phase.tips.map((tip, i) => (
+                      <View key={i} className={styles.phaseTipItem}>
+                        <View
+                          className={styles.phaseTipDot}
+                          style={{ background: phase.color }}
+                        />
+                        <Text className={styles.phaseTipText}>{tip}</Text>
+                      </View>
+                    ))}
+                  </View>
+
+                  <Button
+                    className={styles.phaseActionBtn}
+                    style={{ background: phase.color }}
+                    onClick={() => handlePhaseClick(phase)}
+                  >
+                    查看相关记录 →
+                  </Button>
+                </View>
+              )}
+            </View>
+          ))}
+        </View>
       </View>
       
       {currentPhase && (

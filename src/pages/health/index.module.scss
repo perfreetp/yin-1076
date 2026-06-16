@@ -227,6 +227,32 @@
   line-height: $line-height-normal;
 }
 
+.recordThumb {
+  width: 100%;
+  height: 200rpx;
+  border-radius: $radius-sm;
+  object-fit: cover;
+  margin-top: $spacing-sm;
+}
+
+.emptyMini {
+  padding: $spacing-lg;
+  text-align: center;
+  background: $color-bg-card;
+  border-radius: $radius-md;
+
+  .emptyMiniIcon {
+    font-size: 48rpx;
+    display: block;
+    margin-bottom: $spacing-xs;
+  }
+
+  .emptyMiniText {
+    font-size: $font-size-sm;
+    color: $color-text-placeholder;
+  }
+}
+
 .metricsCard {
   @include ivf-card;
 }

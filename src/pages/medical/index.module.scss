@@ -57,6 +57,17 @@
   margin-bottom: $spacing-md;
 }
 
+.headerActions {
+  display: flex;
+  align-items: center;
+  gap: $spacing-md;
+}
+
+.archiveLink {
+  font-size: $font-size-sm;
+  color: $color-primary;
+}
+
 .sectionTitle {
   font-size: $font-size-lg;
   font-weight: $font-weight-semibold;
@@ -344,6 +355,37 @@
 .breakdownLabel {
   font-size: $font-size-xs;
   opacity: 0.8;
+}
+
+.expenseFilterTabs {
+  display: flex;
+  gap: $spacing-sm;
+  margin-bottom: $spacing-md;
+  overflow-x: auto;
+
+  @include scroll-x-container;
+}
+
+.filterTab {
+  @include scroll-x-item(auto);
+  padding: $spacing-xs $spacing-md;
+  background: $color-bg-card;
+  border-radius: $radius-round;
+  font-size: $font-size-sm;
+  color: $color-text-secondary;
+  white-space: nowrap;
+  transition: all $transition-fast;
+  border: 2rpx solid transparent;
+
+  &.active {
+    background: $color-primary;
+    color: $color-text-white;
+    border-color: $color-primary;
+  }
+
+  &:active {
+    transform: scale(0.96);
+  }
 }
 
 .expenseList {

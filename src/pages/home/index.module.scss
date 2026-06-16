@@ -206,9 +206,223 @@
   text-align: center;
 }
 
-.timelineCard {
+.phasesCard {
   @include ivf-card;
   margin-bottom: $spacing-lg;
+}
+
+.phasesList {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-sm;
+}
+
+.phaseItem {
+  border-radius: $radius-md;
+  background: $color-bg-page;
+  overflow: hidden;
+  transition: all $transition-fast;
+
+  &.completed {
+    .phaseCircle {
+      background: #52C41A !important;
+    }
+  }
+
+  &.current {
+    background: linear-gradient(135deg, rgba($color-primary, 0.08) 0%, rgba($color-bg-page, 1) 100%);
+    border: 2rpx solid rgba($color-primary, 0.3);
+  }
+
+  &.upcoming {
+    opacity: 0.7;
+  }
+}
+
+.phaseHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: $spacing-md;
+  cursor: pointer;
+
+  &:active {
+    background: $color-bg-hover;
+  }
+}
+
+.phaseLeft {
+  display: flex;
+  align-items: center;
+  gap: $spacing-md;
+}
+
+.phaseCircle {
+  width: 56rpx;
+  height: 56rpx;
+  border-radius: 50%;
+  @include flex-center;
+  color: $color-text-white;
+  font-weight: $font-weight-bold;
+  font-size: $font-size-sm;
+  flex-shrink: 0;
+}
+
+.phaseInfo {
+  flex: 1;
+  min-width: 0;
+}
+
+.phaseName {
+  font-size: $font-size-md;
+  font-weight: $font-weight-semibold;
+  color: $color-text-primary;
+  margin-bottom: 4rpx;
+}
+
+.phaseDate {
+  font-size: $font-size-xs;
+  color: $color-text-tertiary;
+}
+
+.phaseRight {
+  display: flex;
+  align-items: center;
+  gap: $spacing-sm;
+}
+
+.phaseProgress {
+  padding: 4rpx 12rpx;
+  background: rgba($color-primary, 0.1);
+  border-radius: $radius-xs;
+}
+
+.phaseProgressText {
+  font-size: $font-size-xs;
+  color: $color-primary;
+  font-weight: $font-weight-medium;
+}
+
+.phaseArrow {
+  font-size: 20rpx;
+  color: $color-text-tertiary;
+}
+
+.phaseDetail {
+  padding: 0 $spacing-md $spacing-md;
+  border-top: 2rpx solid $color-border;
+  animation: slideDown 0.3s ease-out;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10rpx);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.phaseDesc {
+  font-size: $font-size-sm;
+  color: $color-text-secondary;
+  line-height: $line-height-normal;
+  margin: $spacing-md 0;
+}
+
+.phaseProgressBar {
+  margin-bottom: $spacing-md;
+}
+
+.phaseProgressLabel {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: $spacing-xs;
+  font-size: $font-size-xs;
+  color: $color-text-tertiary;
+}
+
+.phaseProgressTrack {
+  height: 12rpx;
+  background: $color-border;
+  border-radius: $radius-round;
+  overflow: hidden;
+}
+
+.phaseProgressFill {
+  height: 100%;
+  border-radius: $radius-round;
+  transition: width $transition-normal;
+}
+
+.nextStepCard {
+  padding: $spacing-md;
+  background: linear-gradient(135deg, rgba($color-primary, 0.1) 0%, rgba($color-secondary, 0.1) 100%);
+  border-radius: $radius-md;
+  margin-bottom: $spacing-md;
+
+  .nextStepTitle {
+    font-size: $font-size-sm;
+    font-weight: $font-weight-semibold;
+    color: $color-primary;
+    margin-bottom: $spacing-xs;
+  }
+
+  .nextStepText {
+    font-size: $font-size-sm;
+    color: $color-text-secondary;
+    line-height: $line-height-normal;
+  }
+}
+
+.phaseTips {
+  margin-bottom: $spacing-md;
+}
+
+.phaseTipsTitle {
+  font-size: $font-size-sm;
+  font-weight: $font-weight-semibold;
+  color: $color-text-primary;
+  margin-bottom: $spacing-sm;
+}
+
+.phaseTipItem {
+  display: flex;
+  align-items: flex-start;
+  gap: $spacing-sm;
+  padding: $spacing-xs 0;
+}
+
+.phaseTipDot {
+  width: 12rpx;
+  height: 12rpx;
+  border-radius: 50%;
+  margin-top: 14rpx;
+  flex-shrink: 0;
+}
+
+.phaseTipText {
+  flex: 1;
+  font-size: $font-size-sm;
+  color: $color-text-secondary;
+  line-height: $line-height-normal;
+}
+
+.phaseActionBtn {
+  @include button-reset;
+  width: 100%;
+  height: $button-height-sm;
+  color: $color-text-white;
+  border-radius: $radius-button;
+  font-size: $font-size-sm;
+  font-weight: $font-weight-medium;
+
+  &:active {
+    opacity: 0.8;
+    transform: scale(0.98);
+  }
 }
 
 .tipsCard {

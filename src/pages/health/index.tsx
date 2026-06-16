@@ -1,19 +1,20 @@
-import React, { useState, useCallback } from 'react';
-import { View, Text, ScrollView, Button } from '@tarojs/components';
-import { usePullDownRefresh } from '@tarojs/taro';
+import React, { useState, useCallback, useMemo } from 'react';
+import { View, Text, ScrollView, Button, Image } from '@tarojs/components';
+import Taro, { usePullDownRefresh, useDidShow } from '@tarojs/taro';
 import classnames from 'classnames';
 import MoodSelector from '@/components/MoodSelector';
 import SymptomTag from '@/components/SymptomTag';
-import type { MoodType, SymptomSeverity } from '@/types/ivf';
+import type { MoodType, SymptomSeverity, PregnancyTest, QuestionCard, AbnormalFlag } from '@/types/ivf';
 import {
   symptomRecords,
   moodRecords,
-  pregnancyTests,
+  pregnancyTests as defaultPregnancyTests,
   bodyMetrics,
-  abnormalFlags,
-  questionCards,
+  abnormalFlags as defaultAbnormalFlags,
+  questionCards as defaultQuestionCards,
   moodOptions
 } from '@/data/health';
+import { storage } from '@/utils/storage';
 import { formatDate, getRelativeDate, daysBetween } from '@/utils/date';
 import styles from './index.module.scss';
 
@@ -30,12 +31,47 @@ const HealthPage: React.FC = () => {
   const [todayMood, setTodayMood] = useState<MoodType | undefined>(undefined);
   const [refreshing, setRefreshing] = useState(false);
 
+  const [pregnancyTests, setPregnancyTests] = useState<PregnancyTest[]>(() =>
+    storage.getPregnancyTests<PregnancyTest[]>(defaultPregnancyTests)
+  );
+  const [questions, setQuestions] = useState<QuestionCard[]>(() =>
+    storage.getQuestions<QuestionCard[]>(defaultQuestionCards)
+  );
+  const [abnormalFlags, setAbnormalFlags] = useState<AbnormalFlag[]>(() =>
+    storage.getAbnormalFlags<AbnormalFlag[]>(defaultAbnormalFlags)
+  );
+
+  const refreshData = useCallback(() => {
+    setPregnancyTests(storage.getPregnancyTests<PregnancyTest[]>(defaultPregnancyTests));
+    setQuestions(storage.getQuestions<QuestionCard[]>(defaultQuestionCards));
+    setAbnormalFlags(storage.getAbnormalFlags<AbnormalFlag[]>(defaultAbnormalFlags));
+  }, []);
+
+  useDidShow(() => {
+    refreshData();
+  });
+
   usePullDownRefresh(() => {
     setRefreshing(true);
+    refreshData();
     setTimeout(() => {
       setRefreshing(false);
     }, 1000);
   });
+
+  const handleQuickAction = useCallback((id: string) => {
+    const pageMap: Record<string, string> = {
+      pregnancy: '/pages/pregnancy-test/index',
+      question: '/pages/question-ask/index',
+      abnormal: '/pages/abnormal-flag/index'
+    };
+    const url = pageMap[id];
+    if (url) {
+      Taro.navigateTo({ url });
+    } else {
+      Taro.showToast({ title: '功能开发中', icon: 'none' });
+    }
+  }, []);
 
   const handleMoodSelect = useCallback((mood: MoodType) => {
     setTodayMood(mood);
@@ -104,7 +140,7 @@ const HealthPage: React.FC = () => {
 
       <View className={styles.quickActions}>
         {quickActions.map((action) => (
-          <View key={action.id} className={styles.actionCard}>
+          <View key={action.id} className={styles.actionCard} onClick={() => handleQuickAction(action.id)}>
             <View
               className={styles.actionIcon}
               style={{ background: `${action.color}15` }}
@@ -254,16 +290,23 @@ const HealthPage: React.FC = () => {
           <Text className={styles.pregnancyNote}>
             预计验孕日期：2026年07月09日（移植后第14天）。请保持心情放松，注意休息，如有异常请及时联系医生。
           </Text>
-          <Button className={styles.recordBtn}>记录验孕结果</Button>
+          <Button className={styles.recordBtn} onClick={() => handleQuickAction('pregnancy')}>
+            记录验孕结果
+          </Button>
         </View>
 
         {pregnancyTests.length > 0 && (
           <View style={{ marginTop: '24rpx' }}>
             <View className={styles.sectionHeader}>
-              <Text className={styles.sectionTitle}>历史记录</Text>
+              <Text className={styles.sectionTitle}>最近验孕记录</Text>
+              <Text className={styles.sectionAction} onClick={() => handleQuickAction('pregnancy')}>查看全部</Text>
             </View>
-            {pregnancyTests.map((test) => (
-              <View key={test.id} className={styles.symptomItem}>
+            {pregnancyTests.slice(0, 3).map((test) => (
+              <View
+                key={test.id}
+                className={styles.symptomItem}
+                onClick={() => handleQuickAction('pregnancy')}
+              >
                 <View className={styles.symptomHeader}>
                   <Text className={styles.symptomDate}>{getRelativeDate(test.date)}</Text>
                   <View className={classnames(
@@ -279,6 +322,13 @@ const HealthPage: React.FC = () => {
                 {test.note && (
                   <Text className={styles.symptomNote} style={{ marginTop: '8rpx' }}>{test.note}</Text>
                 )}
+                {test.imageUrl && (
+                  <Image
+                    className={styles.recordThumb}
+                    src={test.imageUrl}
+                    mode="aspectFill"
+                  />
+                )}
               </View>
             ))}
           </View>
@@ -288,11 +338,15 @@ const HealthPage: React.FC = () => {
       <View className={styles.questionsSection}>
         <View className={styles.sectionHeader}>
           <Text className={styles.sectionTitle}>我的问题</Text>
-          <Text className={styles.sectionAction}>提问</Text>
+          <Text className={styles.sectionAction} onClick={() => handleQuickAction('question')}>提问</Text>
         </View>
         <View className={styles.questionList}>
-          {questionCards.slice(0, 3).map((question) => (
-            <View key={question.id} className={styles.questionItem}>
+          {questions.slice(0, 3).map((question) => (
+            <View
+              key={question.id}
+              className={styles.questionItem}
+              onClick={() => handleQuickAction('question')}
+            >
               <View className={styles.questionHeader}>
                 <View className={styles.questionCategory}>{question.category}</View>
                 <View className={classnames(styles.questionStatus, styles[question.status])}>
@@ -311,19 +365,20 @@ const HealthPage: React.FC = () => {
         </View>
       </View>
 
-      {abnormalFlags.length > 0 && (
-        <View className={styles.abnormalSection}>
-          <View className={styles.sectionHeader}>
-            <Text className={styles.sectionTitle}>异常情况</Text>
-            <Text className={styles.sectionAction}>一键标记</Text>
-          </View>
-          {abnormalFlags.map((abnormal) => (
+      <View className={styles.abnormalSection}>
+        <View className={styles.sectionHeader}>
+          <Text className={styles.sectionTitle}>异常情况</Text>
+          <Text className={styles.sectionAction} onClick={() => handleQuickAction('abnormal')}>一键标记</Text>
+        </View>
+        {abnormalFlags.length > 0 ? (
+          abnormalFlags.slice(0, 3).map((abnormal) => (
             <View
               key={abnormal.id}
               className={classnames(
                 styles.abnormalCard,
                 abnormal.status === 'resolved' && styles.resolved
               )}
+              onClick={() => handleQuickAction('abnormal')}
             >
               <View className={styles.abnormalHeader}>
                 <Text className={styles.abnormalType}>{abnormal.type}</Text>
@@ -345,9 +400,14 @@ const HealthPage: React.FC = () => {
                 </View>
               </View>
             </View>
-          ))}
-        </View>
-      )}
+          ))
+        ) : (
+          <View className={styles.emptyMini}>
+            <Text className={styles.emptyMiniIcon}>✅</Text>
+            <Text className={styles.emptyMiniText}>暂无异常记录</Text>
+          </View>
+        )}
+      </View>
     </ScrollView>
   );
 };

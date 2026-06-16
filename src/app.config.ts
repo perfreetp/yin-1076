@@ -15,7 +15,8 @@ export default defineAppConfig({
     'pages/document-detail/index',
     'pages/question-ask/index',
     'pages/family-share/index',
-    'pages/abnormal-flag/index'
+    'pages/abnormal-flag/index',
+    'pages/document-archive/index'
   ],
   window: {
     backgroundTextStyle: 'light',

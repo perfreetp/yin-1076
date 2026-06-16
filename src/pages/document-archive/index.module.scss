@@ -1,0 +1,227 @@
+@use '@/styles/variables.scss' as *;
+
+.pageContainer {
+  padding: $spacing-md $page-padding;
+  padding-bottom: calc(env(safe-area-inset-bottom) + 120rpx);
+}
+
+.filterTabs {
+  display: flex;
+  gap: $spacing-sm;
+  margin-bottom: $spacing-lg;
+  overflow-x: auto;
+  padding-bottom: $spacing-xs;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+.filterTab {
+  flex-shrink: 0;
+  padding: $spacing-xs $spacing-md;
+  background: $color-bg-page;
+  border-radius: $radius-round;
+  font-size: $font-size-sm;
+  color: $color-text-secondary;
+  transition: all $transition-fast;
+  border: 2rpx solid transparent;
+
+  &.active {
+    background: $color-primary;
+    color: $color-text-white;
+    border-color: $color-primary;
+  }
+
+  &:active {
+    transform: scale(0.96);
+  }
+}
+
+.dateFilter {
+  @include ivf-card;
+  padding: $spacing-md;
+  margin-bottom: $spacing-lg;
+  display: flex;
+  align-items: center;
+  gap: $spacing-md;
+}
+
+.dateLabel {
+  font-size: $font-size-sm;
+  color: $color-text-secondary;
+  white-space: nowrap;
+}
+
+.dateOptions {
+  flex: 1;
+  display: flex;
+  gap: $spacing-sm;
+  overflow-x: auto;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+.dateOption {
+  flex-shrink: 0;
+  padding: 4rpx 16rpx;
+  font-size: $font-size-sm;
+  color: $color-text-tertiary;
+  border-radius: $radius-sm;
+  transition: all $transition-fast;
+
+  &.active {
+    background: rgba($color-primary, 0.1);
+    color: $color-primary;
+    font-weight: $font-weight-medium;
+  }
+}
+
+.statsCard {
+  @include ivf-card;
+  padding: $spacing-lg;
+  margin-bottom: $spacing-lg;
+}
+
+.statsGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: $spacing-md;
+}
+
+.statItem {
+  text-align: center;
+}
+
+.statCount {
+  font-size: 40rpx;
+  font-weight: $font-weight-bold;
+  color: $color-text-primary;
+  margin-bottom: 4rpx;
+}
+
+.statLabel {
+  font-size: $font-size-sm;
+  color: $color-text-tertiary;
+}
+
+.dateGroup {
+  margin-bottom: $spacing-lg;
+}
+
+.dateGroupHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: $spacing-sm;
+  padding: 0 $spacing-xs;
+}
+
+.dateGroupTitle {
+  font-size: $font-size-md;
+  font-weight: $font-weight-semibold;
+  color: $color-text-primary;
+}
+
+.dateGroupCount {
+  font-size: $font-size-sm;
+  color: $color-text-tertiary;
+}
+
+.docGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: $spacing-sm;
+}
+
+.docItem {
+  position: relative;
+  aspect-ratio: 1;
+  border-radius: $radius-md;
+  overflow: hidden;
+  background: $color-bg-page;
+
+  &:active {
+    opacity: 0.85;
+    transform: scale(0.98);
+  }
+}
+
+.docImage {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.docPlaceholder {
+  width: 100%;
+  height: 100%;
+  @include flex-center;
+  flex-direction: column;
+  gap: $spacing-xs;
+  background: linear-gradient(135deg, rgba($color-primary, 0.08) 0%, rgba($color-secondary, 0.08) 100%);
+}
+
+.docIcon {
+  font-size: 48rpx;
+}
+
+.docTypeLabel {
+  font-size: 22rpx;
+  color: $color-text-secondary;
+}
+
+.docBadge {
+  position: absolute;
+  top: 8rpx;
+  left: 8rpx;
+  padding: 2rpx 10rpx;
+  border-radius: $radius-xs;
+  font-size: 20rpx;
+  color: $color-text-white;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 1;
+
+  &.bill { background: $color-primary; }
+  &.question { background: #4A90D9; }
+  &.abnormal { background: #FF4D4F; }
+}
+
+.docTitle {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 8rpx 12rpx;
+  font-size: 22rpx;
+  color: $color-text-white;
+  background: linear-gradient(transparent, rgba(0, 0, 0, 0.7));
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  z-index: 1;
+}
+
+.emptyState {
+  padding: 100rpx 0;
+  text-align: center;
+}
+
+.emptyIcon {
+  font-size: 80rpx;
+  margin-bottom: $spacing-md;
+}
+
+.emptyText {
+  font-size: $font-size-md;
+  color: $color-text-tertiary;
+  margin-bottom: $spacing-sm;
+}
+
+.emptyHint {
+  font-size: $font-size-sm;
+  color: $color-text-tertiary;
+  line-height: $line-height-normal;
+}

@@ -305,12 +305,20 @@ const MedicalPage: React.FC = () => {
         <View className={styles.documentsSection}>
           <View className={styles.sectionHeader}>
             <Text className={styles.sectionTitle}>医院单据</Text>
-            <Button 
-              className={styles.addBtn}
-              onClick={handleAddDocument}
-            >
-              + 上传
-            </Button>
+            <View className={styles.headerActions}>
+              <Text 
+                className={styles.archiveLink}
+                onClick={() => Taro.navigateTo({ url: '/pages/document-archive/index' })}
+              >
+                资料归档
+              </Text>
+              <Button 
+                className={styles.addBtn}
+                onClick={handleAddDocument}
+              >
+                + 上传
+              </Button>
+            </View>
           </View>
           
           <View className={styles.documentList}>
