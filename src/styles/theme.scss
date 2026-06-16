@@ -1,0 +1,45 @@
+// ============================================
+// 主题配色变量（IVF 疗程日历专用）
+// ============================================
+
+// 品牌主题色：温馨粉系，传达关怀与温暖
+$color-primary: #FF6B9D;
+$color-primary-light: #FF9EC2;
+$color-primary-dark: #E85A8A;
+
+// 辅助色：医疗蓝，体现专业性
+$color-secondary: #4A90D9;
+$color-secondary-light: #7AB1E8;
+$color-secondary-dark: #357ABD;
+
+// 功能色
+$color-success: #52C41A;
+$color-warning: #FAAD14;
+$color-error: #FF4D4F;
+$color-info: #4A90D9;
+
+// 疗程节点专属色
+$color-phase-initial: #FF9EC2;    // 初诊
+$color-phase-examination: #4A90D9; // 检查
+$color-phase-stimulation: #FAAD14; // 促排
+$color-phase-retrieval: #FF6B9D;   // 取卵
+$color-phase-transfer: #52C41A;    // 移植
+$color-phase-pregnancy: #722ED1;   // 验孕
+
+// 背景色
+$color-bg-page: #FFF5F7;
+$color-bg-card: #ffffff;
+$color-bg-hover: #FFF0F3;
+$color-bg-gradient: linear-gradient(180deg, #FFF0F3 0%, #FFF5F7 100%);
+
+// 文本色
+$color-text-primary: #1F1F1F;
+$color-text-secondary: #595959;
+$color-text-tertiary: #8C8C8C;
+$color-text-disabled: #BFBFBF;
+$color-text-white: #ffffff;
+
+// 边框色
+$color-border: #F0F0F0;
+$color-divider: #FAFAFA;
+$color-border-light: #FFE6EB;

@@ -1,0 +1,57 @@
+@use '@/styles/variables.scss' as *;
+
+.moodSelector {
+  display: flex;
+  flex-wrap: wrap;
+  gap: $spacing-md;
+  justify-content: center;
+}
+
+.moodItem {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: $spacing-xs;
+  padding: $spacing-md;
+  background: $color-bg-card;
+  border: 2rpx solid $color-border;
+  border-radius: $radius-lg;
+  min-width: 140rpx;
+  transition: all $transition-fast;
+  
+  &:active {
+    transform: scale(0.95);
+  }
+  
+  &.selected {
+    border-width: 2rpx;
+  }
+}
+
+.moodEmoji {
+  font-size: 56rpx;
+  line-height: 1;
+}
+
+.moodLabel {
+  font-size: $font-size-sm;
+  color: $color-text-secondary;
+  font-weight: $font-weight-medium;
+}
+
+.small {
+  gap: $spacing-sm;
+  
+  .moodItem {
+    min-width: 100rpx;
+    padding: $spacing-sm;
+  }
+  
+  .moodEmoji {
+    font-size: 40rpx;
+  }
+  
+  .moodLabel {
+    font-size: $font-size-xs;
+  }
+}

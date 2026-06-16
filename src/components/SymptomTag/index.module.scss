@@ -1,0 +1,38 @@
+@use '@/styles/variables.scss' as *;
+
+.symptomTag {
+  display: inline-flex;
+  align-items: center;
+  gap: $spacing-xs;
+  padding: $spacing-sm $spacing-md;
+  background: $color-bg-card;
+  border: 2rpx solid $color-border;
+  border-radius: $radius-button;
+  transition: all $transition-fast;
+  margin: $spacing-xs;
+  
+  &:active {
+    transform: scale(0.95);
+  }
+  
+  &.selected {
+    border-width: 2rpx;
+  }
+}
+
+.symptomText {
+  font-size: $font-size-sm;
+  color: $color-text-secondary;
+}
+
+.checkIcon {
+  width: 32rpx;
+  height: 32rpx;
+  border-radius: $radius-round;
+  color: $color-text-white;
+  font-size: $font-size-xs;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: $font-weight-bold;
+}

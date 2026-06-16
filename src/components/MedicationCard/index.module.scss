@@ -1,0 +1,165 @@
+@use '@/styles/variables.scss' as *;
+
+.medicationCard {
+  @include ivf-card;
+  
+  &:active {
+    transform: scale(0.98);
+    transition: transform $transition-fast;
+  }
+}
+
+.cardHeader {
+  display: flex;
+  align-items: center;
+  margin-bottom: $spacing-md;
+}
+
+.medicationIcon {
+  width: 88rpx;
+  height: 88rpx;
+  border-radius: $radius-md;
+  background: linear-gradient(135deg, rgba($color-primary, 0.1) 0%, rgba($color-primary-light, 0.1) 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 40rpx;
+  margin-right: $spacing-md;
+}
+
+.medicationInfo {
+  flex: 1;
+  min-width: 0;
+}
+
+.medicationNameRow {
+  display: flex;
+  align-items: center;
+  gap: $spacing-sm;
+  margin-bottom: $spacing-xs;
+}
+
+.medicationName {
+  font-size: $font-size-lg;
+  font-weight: $font-weight-semibold;
+  color: $color-text-primary;
+  @include text-ellipsis;
+  flex: 1;
+}
+
+.typeTag {
+  padding: 4rpx 16rpx;
+  background: rgba($color-primary, 0.1);
+  color: $color-primary;
+  border-radius: $radius-xs;
+  font-size: $font-size-xs;
+  font-weight: $font-weight-medium;
+  flex-shrink: 0;
+}
+
+.medicationDosage {
+  font-size: $font-size-sm;
+  color: $color-text-secondary;
+}
+
+.cardBody {
+  padding: $spacing-md 0;
+  border-top: 1rpx solid $color-divider;
+  border-bottom: 1rpx solid $color-divider;
+  margin-bottom: $spacing-md;
+}
+
+.timeSlots {
+  display: flex;
+  align-items: center;
+  margin-bottom: $spacing-md;
+}
+
+.timeLabel {
+  font-size: $font-size-sm;
+  color: $color-text-secondary;
+  flex-shrink: 0;
+}
+
+.timeList {
+  display: flex;
+  gap: $spacing-sm;
+  flex-wrap: wrap;
+}
+
+.timeChip {
+  padding: 8rpx 20rpx;
+  background: rgba($color-secondary, 0.1);
+  color: $color-secondary;
+  border-radius: $radius-round;
+  font-size: $font-size-sm;
+  font-weight: $font-weight-medium;
+}
+
+.progressRow {
+  display: flex;
+  align-items: center;
+  gap: $spacing-sm;
+}
+
+.progressLabel {
+  font-size: $font-size-sm;
+  color: $color-text-secondary;
+  flex-shrink: 0;
+}
+
+.progressBar {
+  flex: 1;
+  height: 12rpx;
+  background: $color-divider;
+  border-radius: $radius-round;
+  overflow: hidden;
+}
+
+.progressFill {
+  height: 100%;
+  background: linear-gradient(90deg, $color-primary 0%, $color-primary-light 100%);
+  border-radius: $radius-round;
+  transition: width $transition-base;
+}
+
+.progressText {
+  font-size: $font-size-sm;
+  color: $color-primary;
+  font-weight: $font-weight-semibold;
+  min-width: 80rpx;
+  text-align: right;
+}
+
+.cardFooter {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.dateRange {
+  font-size: $font-size-sm;
+  color: $color-text-tertiary;
+}
+
+.checkInBtn {
+  @include button-reset;
+  height: $button-height-sm;
+  padding: 0 $spacing-lg;
+  background: linear-gradient(135deg, $color-primary 0%, $color-primary-light 100%);
+  color: $color-text-white;
+  border-radius: $radius-button;
+  font-size: $font-size-sm;
+  font-weight: $font-weight-medium;
+  
+  &:active {
+    opacity: 0.9;
+    transform: scale(0.95);
+  }
+  
+  &.checkedIn,
+  &[disabled] {
+    background: $color-text-disabled;
+    color: $color-text-white;
+  }
+}

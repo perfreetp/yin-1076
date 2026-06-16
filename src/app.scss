@@ -1,0 +1,96 @@
+@use '@/styles/compat.scss';
+@use '@/styles/variables.scss' as *;
+
+// 全局样式
+page {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'PingFang SC', 'Hiragino Sans GB',
+    sans-serif;
+  font-size: $font-size-md;
+  line-height: $line-height-normal;
+  color: $color-text-primary;
+  background: $color-bg-gradient;
+  min-height: 100vh;
+}
+
+// 通用容器
+.pageContainer {
+  padding: 0 $page-padding;
+  min-height: 100vh;
+  box-sizing: border-box;
+}
+
+// 页面标题
+.pageTitle {
+  font-size: $font-size-xxl;
+  font-weight: $font-weight-semibold;
+  color: $color-text-primary;
+  margin-bottom: $spacing-lg;
+}
+
+// 页面副标题
+.pageSubtitle {
+  font-size: $font-size-md;
+  color: $color-text-secondary;
+  margin-bottom: $spacing-xl;
+}
+
+// 通用卡片
+.card {
+  @include ivf-card;
+  margin-bottom: $spacing-md;
+}
+
+// 卡片标题
+.cardTitle {
+  font-size: $font-size-lg;
+  font-weight: $font-weight-semibold;
+  color: $color-text-primary;
+  margin-bottom: $spacing-md;
+}
+
+// 空状态
+.emptyState {
+  @include flex-center;
+  flex-direction: column;
+  padding: $spacing-xl * 2 $spacing-lg;
+  color: $color-text-tertiary;
+  font-size: $font-size-sm;
+}
+
+// 分割线
+.divider {
+  height: 1rpx;
+  background: $color-divider;
+  margin: $spacing-md 0;
+}
+
+// 主按钮
+.btnPrimary {
+  @include primary-button;
+}
+
+// 次按钮
+.btnSecondary {
+  @include secondary-button;
+}
+
+// 标签
+.tagSuccess {
+  @include tag(rgba($color-success, 0.1), $color-success);
+}
+
+.tagWarning {
+  @include tag(rgba($color-warning, 0.1), $color-warning);
+}
+
+.tagError {
+  @include tag(rgba($color-error, 0.1), $color-error);
+}
+
+.tagInfo {
+  @include tag(rgba($color-info, 0.1), $color-info);
+}
+
+.tagPrimary {
+  @include tag(rgba($color-primary, 0.1), $color-primary);
+}

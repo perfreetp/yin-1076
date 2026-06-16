@@ -1,0 +1,135 @@
+@use '@/styles/variables.scss' as *;
+
+.timeline {
+  padding-left: $spacing-sm;
+}
+
+.timelineItem {
+  display: flex;
+  position: relative;
+  padding-bottom: $spacing-xl;
+
+  &:last-child {
+    padding-bottom: 0;
+  }
+
+  &.current {
+    .timelineTitle {
+      color: $color-primary;
+      font-weight: $font-weight-semibold;
+    }
+  }
+}
+
+.timelineLine {
+  width: 4rpx;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-right: $spacing-md;
+}
+
+.line {
+  flex: 1;
+  width: 4rpx;
+  background: $color-border;
+  margin-top: $spacing-md;
+
+  &.lineCompleted {
+    background: $color-success;
+  }
+}
+
+.timelineDot {
+  flex-shrink: 0;
+  margin-right: $spacing-md;
+  position: relative;
+}
+
+.dot {
+  width: 32rpx;
+  height: 32rpx;
+  border-radius: $radius-round;
+  background: $color-bg-card;
+  border: 4rpx solid $color-border;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  &.dotCompleted {
+    background: $color-success;
+    border-color: $color-success;
+  }
+
+  &.dotCurrent {
+    border: none;
+    animation: pulse 2s infinite;
+  }
+}
+
+.dotCheck {
+  color: $color-text-white;
+  font-size: $font-size-xs;
+  font-weight: $font-weight-bold;
+}
+
+.keyDot {
+  position: absolute;
+  top: -8rpx;
+  right: -8rpx;
+  width: 16rpx;
+  height: 16rpx;
+  border-radius: $radius-round;
+  border: 2rpx solid $color-bg-card;
+}
+
+@keyframes pulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba($color-primary, 0.4);
+  }
+  70% {
+    box-shadow: 0 0 0 16rpx rgba($color-primary, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba($color-primary, 0);
+  }
+}
+
+.timelineContent {
+  flex: 1;
+  min-width: 0;
+}
+
+.timelineHeader {
+  display: flex;
+  align-items: center;
+  gap: $spacing-sm;
+  margin-bottom: $spacing-xs;
+}
+
+.timelineDate {
+  font-size: $font-size-sm;
+  color: $color-text-tertiary;
+}
+
+.keyTag {
+  font-size: $font-size-xs;
+  padding: 2rpx 12rpx;
+  border-radius: $radius-xs;
+  font-weight: $font-weight-medium;
+}
+
+.timelineTitle {
+  font-size: $font-size-md;
+  color: $color-text-primary;
+  font-weight: $font-weight-medium;
+  margin-bottom: $spacing-xs;
+  @include text-ellipsis;
+}
+
+.timelineDesc {
+  font-size: $font-size-sm;
+  color: $color-text-secondary;
+  line-height: $line-height-normal;
+  @include text-ellipsis-multi(2);
+}

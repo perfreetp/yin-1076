@@ -1,0 +1,27 @@
+import React from 'react';
+import { View, Text, Button } from '@tarojs/components';
+import Taro from '@tarojs/taro';
+import styles from './index.module.scss';
+
+const ExaminationDetailPage: React.FC = () => {
+  const handleBack = () => {
+    Taro.navigateBack();
+  };
+
+  return (
+    <View className={styles.pageContainer}>
+      <View className={styles.placeholderCard}>
+        <Text className={styles.placeholderIcon}>🔬</Text>
+        <Text className={styles.placeholderTitle}>检查详情</Text>
+        <Text className={styles.placeholderDesc}>
+          此页面将展示详细的检查项目信息，包括检查时间、地点、注意事项、检查报告等功能。
+        </Text>
+        <Button className={styles.backBtn} onClick={handleBack}>
+          返回上一页
+        </Button>
+      </View>
+    </View>
+  );
+};
+
+export default ExaminationDetailPage;

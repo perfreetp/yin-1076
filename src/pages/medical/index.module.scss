@@ -1,0 +1,443 @@
+@use '@/styles/variables.scss' as *;
+
+.pageContainer {
+  padding: $spacing-lg $page-padding;
+  padding-bottom: calc(env(safe-area-inset-bottom) + 120rpx);
+}
+
+.pageHeader {
+  margin-bottom: $spacing-lg;
+}
+
+.pageTitle {
+  font-size: $font-size-xxl;
+  font-weight: $font-weight-semibold;
+  color: $color-text-primary;
+  margin-bottom: $spacing-xs;
+}
+
+.pageSubtitle {
+  font-size: $font-size-md;
+  color: $color-text-secondary;
+}
+
+.tabBar {
+  display: flex;
+  background: $color-bg-card;
+  border-radius: $radius-lg;
+  padding: $spacing-xs;
+  margin-bottom: $spacing-lg;
+  box-shadow: $shadow-card;
+}
+
+.tabItem {
+  flex: 1;
+  text-align: center;
+  padding: $spacing-md $spacing-sm;
+  border-radius: $radius-md;
+  font-size: $font-size-md;
+  color: $color-text-secondary;
+  font-weight: $font-weight-medium;
+  transition: all $transition-fast;
+  
+  &.active {
+    background: linear-gradient(135deg, $color-primary 0%, $color-primary-light 100%);
+    color: $color-text-white;
+  }
+  
+  &:active {
+    transform: scale(0.95);
+  }
+}
+
+.sectionHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: $spacing-md;
+}
+
+.sectionTitle {
+  font-size: $font-size-lg;
+  font-weight: $font-weight-semibold;
+  color: $color-text-primary;
+}
+
+.sectionAction {
+  font-size: $font-size-sm;
+  color: $color-primary;
+}
+
+.medicationsSection,
+.examinationsSection,
+.documentsSection,
+.expensesSection {
+  margin-bottom: $spacing-lg;
+}
+
+.addBtn {
+  @include button-reset;
+  height: $button-height-sm;
+  padding: 0 $spacing-lg;
+  background: rgba($color-primary, 0.1);
+  color: $color-primary;
+  border-radius: $radius-button;
+  font-size: $font-size-sm;
+  font-weight: $font-weight-medium;
+  
+  &:active {
+    background: rgba($color-primary, 0.2);
+  }
+}
+
+.examList {
+  margin-top: $spacing-md;
+}
+
+.examItem {
+  @include ivf-card;
+  margin-bottom: $spacing-sm;
+  
+  &:active {
+    transform: scale(0.98);
+    transition: transform $transition-fast;
+  }
+}
+
+.examHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: $spacing-sm;
+}
+
+.examInfo {
+  flex: 1;
+  min-width: 0;
+}
+
+.examName {
+  font-size: $font-size-md;
+  font-weight: $font-weight-semibold;
+  color: $color-text-primary;
+  margin-bottom: $spacing-xs;
+  @include text-ellipsis;
+}
+
+.examMeta {
+  display: flex;
+  align-items: center;
+  gap: $spacing-sm;
+  flex-wrap: wrap;
+}
+
+.examDate {
+  font-size: $font-size-sm;
+  color: $color-text-secondary;
+}
+
+.examStatus {
+  padding: 4rpx 16rpx;
+  border-radius: $radius-xs;
+  font-size: $font-size-xs;
+  font-weight: $font-weight-medium;
+  
+  &.pending {
+    background: rgba($color-warning, 0.1);
+    color: $color-warning;
+  }
+  
+  &.completed {
+    background: rgba($color-success, 0.1);
+    color: $color-success;
+  }
+}
+
+.examHospital {
+  font-size: $font-size-sm;
+  color: $color-text-tertiary;
+  margin-top: $spacing-xs;
+}
+
+.examRequirements {
+  margin-top: $spacing-md;
+  padding-top: $spacing-md;
+  border-top: 1rpx solid $color-divider;
+}
+
+.requirementsLabel {
+  font-size: $font-size-sm;
+  color: $color-text-secondary;
+  margin-bottom: $spacing-sm;
+}
+
+.requirementTags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: $spacing-sm;
+}
+
+.requirementTag {
+  padding: 6rpx 16rpx;
+  background: rgba($color-secondary, 0.1);
+  color: $color-secondary;
+  border-radius: $radius-xs;
+  font-size: $font-size-xs;
+}
+
+.examNote {
+  margin-top: $spacing-md;
+  padding: $spacing-md;
+  background: $color-bg-hover;
+  border-radius: $radius-md;
+  font-size: $font-size-sm;
+  color: $color-text-secondary;
+  line-height: $line-height-normal;
+}
+
+.examResult {
+  margin-top: $spacing-md;
+  padding: $spacing-md;
+  background: rgba($color-success, 0.05);
+  border-radius: $radius-md;
+  border-left: 6rpx solid $color-success;
+}
+
+.resultLabel {
+  font-size: $font-size-sm;
+  color: $color-success;
+  font-weight: $font-weight-medium;
+  margin-bottom: $spacing-xs;
+}
+
+.resultContent {
+  font-size: $font-size-sm;
+  color: $color-text-secondary;
+  line-height: $line-height-normal;
+}
+
+.documentList {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: $spacing-md;
+  margin-top: $spacing-md;
+}
+
+.documentItem {
+  @include ivf-card;
+  margin-bottom: 0;
+  padding: $spacing-md;
+  
+  &:active {
+    transform: scale(0.95);
+  }
+}
+
+.documentImage {
+  width: 100%;
+  height: 200rpx;
+  border-radius: $radius-md;
+  margin-bottom: $spacing-sm;
+  overflow: hidden;
+  background: $color-bg-hover;
+}
+
+.documentImg {
+  width: 100%;
+  height: 100%;
+}
+
+.documentTitle {
+  font-size: $font-size-sm;
+  font-weight: $font-weight-medium;
+  color: $color-text-primary;
+  margin-bottom: $spacing-xs;
+  @include text-ellipsis;
+}
+
+.documentType {
+  font-size: $font-size-xs;
+  color: $color-primary;
+  margin-bottom: $spacing-xs;
+}
+
+.documentDate {
+  font-size: $font-size-xs;
+  color: $color-text-tertiary;
+}
+
+.addDocumentCard {
+  @include ivf-card;
+  padding: $spacing-md;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 260rpx;
+  border: 2rpx dashed $color-border;
+  background: transparent;
+  
+  &:active {
+    transform: scale(0.95);
+  }
+}
+
+.addIcon {
+  font-size: 64rpx;
+  color: $color-text-tertiary;
+  margin-bottom: $spacing-sm;
+}
+
+.addText {
+  font-size: $font-size-sm;
+  color: $color-text-tertiary;
+}
+
+.expenseSummary {
+  @include ivf-card;
+  margin-bottom: $spacing-lg;
+  background: linear-gradient(135deg, $color-secondary 0%, $color-secondary-light 100%);
+  color: $color-text-white;
+  
+  .summaryLabel {
+    color: rgba(255, 255, 255, 0.9);
+  }
+  
+  .summaryAmount {
+    color: $color-text-white;
+  }
+}
+
+.summaryHeader {
+  text-align: center;
+  margin-bottom: $spacing-lg;
+}
+
+.summaryLabel {
+  font-size: $font-size-md;
+  margin-bottom: $spacing-sm;
+}
+
+.summaryAmount {
+  font-size: 56rpx;
+  font-weight: $font-weight-bold;
+  line-height: 1;
+}
+
+.summaryBreakdown {
+  display: flex;
+  justify-content: space-around;
+  padding-top: $spacing-lg;
+  border-top: 1rpx solid rgba(255, 255, 255, 0.2);
+}
+
+.breakdownItem {
+  text-align: center;
+}
+
+.breakdownValue {
+  font-size: $font-size-lg;
+  font-weight: $font-weight-semibold;
+  margin-bottom: $spacing-xs;
+}
+
+.breakdownLabel {
+  font-size: $font-size-xs;
+  opacity: 0.8;
+}
+
+.expenseList {
+  margin-top: $spacing-md;
+}
+
+.expenseItem {
+  @include ivf-card;
+  margin-bottom: $spacing-sm;
+  display: flex;
+  align-items: center;
+  gap: $spacing-md;
+  
+  &:active {
+    transform: scale(0.98);
+  }
+}
+
+.expenseIcon {
+  width: 80rpx;
+  height: 80rpx;
+  border-radius: $radius-md;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 36rpx;
+  flex-shrink: 0;
+}
+
+.expenseContent {
+  flex: 1;
+  min-width: 0;
+}
+
+.expenseType {
+  display: inline-block;
+  padding: 4rpx 12rpx;
+  background: rgba($color-primary, 0.1);
+  color: $color-primary;
+  border-radius: $radius-xs;
+  font-size: $font-size-xs;
+  font-weight: $font-weight-medium;
+  margin-bottom: $spacing-xs;
+}
+
+.expenseDesc {
+  font-size: $font-size-md;
+  color: $color-text-primary;
+  font-weight: $font-weight-medium;
+  margin-bottom: $spacing-xs;
+  @include text-ellipsis;
+}
+
+.expenseDate {
+  font-size: $font-size-sm;
+  color: $color-text-tertiary;
+}
+
+.expenseAmount {
+  font-size: $font-size-lg;
+  font-weight: $font-weight-semibold;
+  color: $color-text-primary;
+  flex-shrink: 0;
+}
+
+.emptyState {
+  @include ivf-card;
+  text-align: center;
+  padding: $spacing-xl * 2 $spacing-lg;
+}
+
+.emptyIcon {
+  font-size: 80rpx;
+  margin-bottom: $spacing-md;
+}
+
+.emptyText {
+  font-size: $font-size-md;
+  color: $color-text-tertiary;
+}
+
+.viewAllBtn {
+  @include button-reset;
+  width: 100%;
+  height: $button-height-md;
+  background: $color-bg-card;
+  color: $color-primary;
+  border: 2rpx solid $color-primary;
+  border-radius: $radius-button;
+  font-size: $font-size-md;
+  font-weight: $font-weight-medium;
+  margin-top: $spacing-md;
+  
+  &:active {
+    background: rgba($color-primary, 0.05);
+  }
+}
