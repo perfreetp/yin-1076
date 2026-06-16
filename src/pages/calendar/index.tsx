@@ -62,7 +62,7 @@ const CalendarPage: React.FC = () => {
   };
   
   const selectedDateEvents = useMemo(() => {
-    const dayEvents = getEventsByDate(selectedDate);
+    const dayEvents = events.filter(event => event.date === selectedDate);
     if (activePhase === 'all') return dayEvents;
     return dayEvents.filter(e => e.phase === activePhase);
   }, [selectedDate, activePhase, events]);

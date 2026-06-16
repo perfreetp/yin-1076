@@ -11,6 +11,7 @@ export default defineAppConfig({
     'pages/pregnancy-test/index',
     'pages/expense-record/index',
     'pages/document-upload/index',
+    'pages/document-detail/index',
     'pages/question-ask/index',
     'pages/family-share/index',
     'pages/abnormal-flag/index'

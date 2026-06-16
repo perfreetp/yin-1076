@@ -5,44 +5,383 @@
   padding-bottom: calc(env(safe-area-inset-bottom) + 120rpx);
 }
 
-.placeholderCard {
+.introCard {
   @include ivf-card;
-  text-align: center;
-  padding: $spacing-xl * 2 $spacing-lg;
-}
-
-.placeholderIcon {
-  font-size: 120rpx;
+  background: linear-gradient(135deg, $color-primary 0%, $color-primary-light 100%);
   margin-bottom: $spacing-lg;
-  opacity: 0.5;
+
+  .introTitle {
+    font-size: $font-size-lg;
+    font-weight: $font-weight-semibold;
+    color: $color-text-white;
+    margin-bottom: $spacing-sm;
+  }
+
+  .introDesc {
+    font-size: $font-size-sm;
+    color: rgba(255, 255, 255, 0.8);
+    line-height: $line-height-normal;
+  }
 }
 
-.placeholderTitle {
-  font-size: $font-size-xl;
+.membersSection {
+  @include ivf-card;
+  margin-bottom: $spacing-lg;
+}
+
+.sectionTitle {
+  font-size: $font-size-lg;
   font-weight: $font-weight-semibold;
   color: $color-text-primary;
+  margin-bottom: $spacing-lg;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.addMemberBtn {
+  font-size: $font-size-sm;
+  color: $color-primary;
+  display: flex;
+  align-items: center;
+  gap: 4rpx;
+}
+
+.membersList {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-md;
+}
+
+.memberItem {
+  display: flex;
+  align-items: center;
+  padding: $spacing-md;
+  background: $color-bg-page;
+  border-radius: $radius-md;
+  transition: all $transition-fast;
+
+  &:active {
+    background: $color-bg-hover;
+  }
+}
+
+.memberAvatar {
+  width: 96rpx;
+  height: 96rpx;
+  border-radius: 50%;
+  background: linear-gradient(135deg, $color-primary-light 0%, $color-primary 100%);
+  @include flex-center;
+  font-size: 40rpx;
+  margin-right: $spacing-md;
+  flex-shrink: 0;
+}
+
+.memberInfo {
+  flex: 1;
+  min-width: 0;
+}
+
+.memberName {
+  font-size: $font-size-md;
+  font-weight: $font-weight-semibold;
+  color: $color-text-primary;
+  margin-bottom: 4rpx;
+  display: flex;
+  align-items: center;
+  gap: $spacing-xs;
+}
+
+.memberRelation {
+  font-size: $font-size-xs;
+  padding: 2rpx 12rpx;
+  background: rgba(255, 107, 157, 0.1);
+  color: $color-primary;
+  border-radius: $radius-xs;
+}
+
+.memberJoinDate {
+  font-size: $font-size-sm;
+  color: $color-text-tertiary;
   margin-bottom: $spacing-sm;
 }
 
-.placeholderDesc {
-  font-size: $font-size-md;
+.memberPermissions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8rpx;
+}
+
+.permissionTag {
+  font-size: 20rpx;
+  padding: 2rpx 10rpx;
+  background: $color-bg-hover;
   color: $color-text-secondary;
-  line-height: $line-height-normal;
+  border-radius: $radius-xs;
+}
+
+.memberActions {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-sm;
+  margin-left: $spacing-md;
+}
+
+.actionBtn {
+  font-size: $font-size-xs;
+  padding: 8rpx 16rpx;
+  border-radius: $radius-sm;
+  text-align: center;
+
+  &.edit {
+    background: rgba(74, 144, 217, 0.1);
+    color: #4A90D9;
+  }
+
+  &.remove {
+    background: rgba(255, 77, 79, 0.1);
+    color: #FF4D4F;
+  }
+}
+
+.inviteSection {
+  @include ivf-card;
   margin-bottom: $spacing-lg;
 }
 
-.backBtn {
-  @include button-reset;
-  width: 100%;
+.shareCodeCard {
+  background: linear-gradient(135deg, rgba(255, 107, 157, 0.05) 0%, rgba(255, 159, 67, 0.05) 100%);
+  border: 2rpx dashed $color-primary;
+  border-radius: $radius-md;
+  padding: $spacing-lg;
+  text-align: center;
+  margin-bottom: $spacing-lg;
+
+  .codeLabel {
+    font-size: $font-size-sm;
+    color: $color-text-secondary;
+    margin-bottom: $spacing-sm;
+  }
+
+  .codeValue {
+    font-size: 56rpx;
+    font-weight: $font-weight-bold;
+    color: $color-primary;
+    letter-spacing: 8rpx;
+    margin-bottom: $spacing-md;
+    font-family: 'Courier New', monospace;
+  }
+
+  .codeExpire {
+    font-size: $font-size-xs;
+    color: $color-text-tertiary;
+  }
+}
+
+.inviteActions {
+  display: flex;
+  gap: $spacing-md;
+}
+
+.inviteBtn {
+  @include flex-center;
+  flex: 1;
   height: $button-height-md;
-  background: linear-gradient(135deg, $color-primary 0%, $color-primary-light 100%);
-  color: $color-text-white;
   border-radius: $radius-button;
   font-size: $font-size-md;
   font-weight: $font-weight-medium;
-  
+  transition: all $transition-fast;
+
+  &.primary {
+    background: linear-gradient(135deg, $color-primary 0%, $color-primary-light 100%);
+    color: $color-text-white;
+  }
+
+  &.secondary {
+    background: $color-bg-page;
+    color: $color-primary;
+    border: 2rpx solid $color-primary;
+  }
+
   &:active {
-    opacity: 0.9;
     transform: scale(0.98);
+    opacity: 0.9;
+  }
+}
+
+.activitySection {
+  @include ivf-card;
+}
+
+.filterTabs {
+  display: flex;
+  gap: $spacing-sm;
+  margin-bottom: $spacing-lg;
+  overflow-x: auto;
+
+  @include scroll-x-container;
+}
+
+.filterTab {
+  @include scroll-x-item(auto);
+  padding: $spacing-sm $spacing-lg;
+  background: $color-bg-page;
+  border-radius: $radius-round;
+  font-size: $font-size-sm;
+  color: $color-text-secondary;
+  white-space: nowrap;
+  transition: all $transition-fast;
+
+  &.active {
+    background: $color-primary;
+    color: $color-text-white;
+  }
+
+  &:active {
+    transform: scale(0.96);
+  }
+}
+
+.activityList {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-md;
+}
+
+.activityItem {
+  display: flex;
+  padding: $spacing-md;
+  background: $color-bg-page;
+  border-radius: $radius-md;
+  transition: all $transition-fast;
+
+  &:active {
+    background: $color-bg-hover;
+  }
+}
+
+.activityAvatar {
+  width: 72rpx;
+  height: 72rpx;
+  border-radius: 50%;
+  background: linear-gradient(135deg, $color-primary-light 0%, $color-primary 100%);
+  @include flex-center;
+  font-size: 32rpx;
+  margin-right: $spacing-md;
+  flex-shrink: 0;
+}
+
+.activityContent {
+  flex: 1;
+  min-width: 0;
+}
+
+.activityText {
+  font-size: $font-size-sm;
+  color: $color-text-primary;
+  line-height: $line-height-normal;
+  margin-bottom: $spacing-xs;
+
+  .memberName {
+    color: $color-primary;
+    font-weight: $font-weight-medium;
+  }
+
+  .actionType {
+    color: $color-text-secondary;
+  }
+}
+
+.activityTime {
+  font-size: $font-size-xs;
+  color: $color-text-tertiary;
+}
+
+.emptyState {
+  padding: $spacing-xl * 2;
+  text-align: center;
+
+  .emptyIcon {
+    font-size: 80rpx;
+    margin-bottom: $spacing-md;
+    opacity: 0.5;
+  }
+
+  .emptyText {
+    font-size: $font-size-md;
+    color: $color-text-placeholder;
+    margin-bottom: $spacing-sm;
+  }
+
+  .emptySubtext {
+    font-size: $font-size-sm;
+    color: $color-text-tertiary;
+  }
+}
+
+.permissionSection {
+  @include ivf-card;
+  margin-bottom: $spacing-lg;
+}
+
+.permissionList {
+  display: flex;
+  flex-direction: column;
+}
+
+.permissionItem {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: $spacing-md 0;
+  border-bottom: 2rpx solid $color-border;
+
+  &:last-child {
+    border-bottom: none;
+  }
+}
+
+.permissionInfo {
+  flex: 1;
+}
+
+.permissionName {
+  font-size: $font-size-md;
+  color: $color-text-primary;
+  margin-bottom: 4rpx;
+}
+
+.permissionDesc {
+  font-size: $font-size-sm;
+  color: $color-text-tertiary;
+}
+
+.permissionSwitch {
+  width: 88rpx;
+  height: 48rpx;
+  border-radius: $radius-round;
+  background: $color-border;
+  position: relative;
+  transition: all $transition-fast;
+
+  &.active {
+    background: $color-primary;
+  }
+
+  &::after {
+    content: '';
+    position: absolute;
+    top: 4rpx;
+    left: 4rpx;
+    width: 40rpx;
+    height: 40rpx;
+    background: $color-text-white;
+    border-radius: 50%;
+    transition: all $transition-fast;
+    box-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.1);
+  }
+
+  &.active::after {
+    left: 44rpx;
   }
 }

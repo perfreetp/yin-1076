@@ -1,0 +1,198 @@
+@use '@/styles/variables.scss' as *;
+
+.pageContainer {
+  padding: $spacing-lg $page-padding;
+  padding-bottom: calc(env(safe-area-inset-bottom) + 120rpx);
+}
+
+.documentHeader {
+  @include ivf-card;
+  margin-bottom: $spacing-lg;
+}
+
+.documentType {
+  display: inline-block;
+  padding: $spacing-xs $spacing-md;
+  background: rgba($color-primary, 0.1);
+  color: $color-primary;
+  border-radius: $radius-xs;
+  font-size: $font-size-sm;
+  font-weight: $font-weight-medium;
+  margin-bottom: $spacing-sm;
+}
+
+.documentTitle {
+  font-size: $font-size-xl;
+  font-weight: $font-weight-semibold;
+  color: $color-text-primary;
+  margin-bottom: $spacing-sm;
+}
+
+.documentMeta {
+  display: flex;
+  gap: $spacing-lg;
+  flex-wrap: wrap;
+}
+
+.metaItem {
+  display: flex;
+  align-items: center;
+  gap: $spacing-xs;
+  font-size: $font-size-sm;
+  color: $color-text-secondary;
+}
+
+.metaIcon {
+  font-size: $font-size-md;
+}
+
+.imageSection {
+  @include ivf-card;
+  margin-bottom: $spacing-lg;
+  padding: 0;
+  overflow: hidden;
+}
+
+.documentImage {
+  width: 100%;
+  height: 500rpx;
+  display: block;
+}
+
+.imageActions {
+  display: flex;
+  padding: $spacing-md;
+  gap: $spacing-sm;
+}
+
+.actionBtn {
+  @include button-reset;
+  flex: 1;
+  height: $button-height-sm;
+  background: $color-bg-hover;
+  color: $color-text-secondary;
+  border-radius: $radius-md;
+  font-size: $font-size-sm;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: $spacing-xs;
+  
+  &:active {
+    background: $color-divider;
+  }
+}
+
+.infoSection {
+  @include ivf-card;
+  margin-bottom: $spacing-lg;
+}
+
+.sectionTitle {
+  font-size: $font-size-lg;
+  font-weight: $font-weight-semibold;
+  color: $color-text-primary;
+  margin-bottom: $spacing-md;
+}
+
+.infoRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding: $spacing-sm 0;
+  border-bottom: 1rpx solid $color-divider;
+  
+  &:last-child {
+    border-bottom: none;
+  }
+}
+
+.infoLabel {
+  font-size: $font-size-sm;
+  color: $color-text-tertiary;
+  flex-shrink: 0;
+}
+
+.infoValue {
+  font-size: $font-size-sm;
+  color: $color-text-primary;
+  text-align: right;
+  flex: 1;
+  margin-left: $spacing-md;
+}
+
+.noteSection {
+  @include ivf-card;
+  margin-bottom: $spacing-lg;
+  background: linear-gradient(135deg, rgba($color-secondary, 0.05) 0%, rgba($color-bg-card, 1) 100%);
+  border-left: 6rpx solid $color-secondary;
+}
+
+.noteLabel {
+  font-size: $font-size-sm;
+  color: $color-secondary;
+  font-weight: $font-weight-medium;
+  margin-bottom: $spacing-xs;
+}
+
+.noteContent {
+  font-size: $font-size-sm;
+  color: $color-text-secondary;
+  line-height: $line-height-normal;
+}
+
+.tagsSection {
+  @include ivf-card;
+  margin-bottom: $spacing-lg;
+}
+
+.tagsList {
+  display: flex;
+  flex-wrap: wrap;
+  gap: $spacing-sm;
+}
+
+.tagItem {
+  padding: $spacing-xs $spacing-md;
+  background: $color-bg-hover;
+  border-radius: $radius-xs;
+  font-size: $font-size-sm;
+  color: $color-text-secondary;
+}
+
+.footerActions {
+  display: flex;
+  gap: $spacing-md;
+}
+
+.primaryBtn {
+  @include button-reset;
+  flex: 1;
+  height: $button-height-md;
+  background: linear-gradient(135deg, $color-primary 0%, $color-primary-light 100%);
+  color: $color-text-white;
+  border-radius: $radius-button;
+  font-size: $font-size-md;
+  font-weight: $font-weight-medium;
+  
+  &:active {
+    opacity: 0.9;
+    transform: scale(0.98);
+  }
+}
+
+.secondaryBtn {
+  @include button-reset;
+  flex: 1;
+  height: $button-height-md;
+  background: $color-bg-card;
+  color: $color-primary;
+  border: 2rpx solid $color-primary;
+  border-radius: $radius-button;
+  font-size: $font-size-md;
+  font-weight: $font-weight-medium;
+  
+  &:active {
+    background: rgba($color-primary, 0.05);
+  }
+}

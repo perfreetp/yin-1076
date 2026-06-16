@@ -1,5 +1,6 @@
 import React, { useState, useCallback, useMemo } from 'react';
 import { View, Text, ScrollView } from '@tarojs/components';
+import Taro from '@tarojs/taro';
 import classnames from 'classnames';
 import type { MessageType, Message } from '@/types/ivf';
 import { messages, messageStats, messageTypeLabels, messageTypeColors } from '@/data/message';
@@ -44,6 +45,15 @@ const MessagePage: React.FC = () => {
       prev.map(msg => ({ ...msg, read: true }))
     );
   }, []);
+
+  const handleMessageClick = useCallback((message: Message) => {
+    if (!message.read) {
+      handleMarkRead(message.id);
+    }
+    if (message.actionUrl) {
+      Taro.navigateTo({ url: message.actionUrl });
+    }
+  }, [handleMarkRead]);
 
   const filteredMessages = useMemo(() => {
     if (activeCategory === 'all') {
@@ -171,6 +181,7 @@ const MessagePage: React.FC = () => {
                 styles.messageItem,
                 !message.read && styles.unread
               )}
+              onClick={() => handleMessageClick(message)}
             >
               {!message.read && <View className={styles.unreadDot} />}
               

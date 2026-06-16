@@ -89,6 +89,10 @@ const MedicalPage: React.FC = () => {
     Taro.navigateTo({ url: '/pages/document-upload/index' });
   };
   
+  const handleDocumentClick = (id: string) => {
+    Taro.navigateTo({ url: `/pages/document-detail/index?id=${id}` });
+  };
+  
   const handleAddExpense = () => {
     Taro.navigateTo({ url: '/pages/expense-record/index' });
   };
@@ -273,7 +277,7 @@ const MedicalPage: React.FC = () => {
               <View 
                 key={doc.id}
                 className={styles.documentItem}
-                onClick={() => handleAddDocument()}
+                onClick={() => handleDocumentClick(doc.id)}
               >
                 <View className={styles.documentImage}>
                   <Image 
