@@ -1,15 +1,14 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useMemo } from 'react';
 import { View, Text, ScrollView, Button, Image } from '@tarojs/components';
 import Taro from '@tarojs/taro';
 import { usePullDownRefresh, useDidShow } from '@tarojs/taro';
 import MedicationCard from '@/components/MedicationCard';
-import type { Medication, Examination, MedicalDocument, ExpenseRecord } from '@/types/ivf';
+import type { Medication, Examination, MedicalDocument, ExpenseRecord, ExpenseType } from '@/types/ivf';
 import { 
   medications as defaultMedications, 
   examinations, 
   medicalDocuments as defaultDocuments, 
-  expenseRecords as defaultExpenses, 
-  expenseSummary 
+  expenseRecords as defaultExpenses
 } from '@/data/medical';
 import { storage } from '@/utils/storage';
 import { getRelativeDate } from '@/utils/date';
@@ -59,11 +58,35 @@ const MedicalPage: React.FC = () => {
     storage.getExpenses<ExpenseRecord[]>(defaultExpenses)
   );
 
+  const [expenseFilter, setExpenseFilter] = useState<ExpenseType | 'all'>('all');
+
   const refreshData = useCallback(() => {
     setMeds(storage.getMedications<Medication[]>(defaultMedications));
     setDocs(storage.getDocuments<MedicalDocument[]>(defaultDocuments));
     setExpenses(storage.getExpenses<ExpenseRecord[]>(defaultExpenses));
   }, []);
+
+  const expenseSummary = useMemo(() => {
+    const total = expenses.reduce((sum, e) => sum + e.amount, 0);
+    const byType: Record<string, number> = {
+      medication: 0,
+      examination: 0,
+      surgery: 0,
+      injection: 0,
+      other: 0
+    };
+    expenses.forEach(e => {
+      if (byType[e.type] !== undefined) {
+        byType[e.type] += e.amount;
+      }
+    });
+    return { total, byType, count: expenses.length };
+  }, [expenses]);
+
+  const filteredExpenses = useMemo(() => {
+    if (expenseFilter === 'all') return expenses;
+    return expenses.filter(e => e.type === expenseFilter);
+  }, [expenses, expenseFilter]);
 
   useDidShow(() => {
     refreshData();
@@ -345,18 +368,38 @@ const MedicalPage: React.FC = () => {
             </View>
           </View>
           
+          <View className={styles.expenseFilterTabs}>
+            <View
+              className={`${styles.filterTab} ${expenseFilter === 'all' ? styles.active : ''}`}
+              onClick={() => setExpenseFilter('all')}
+            >
+              全部
+            </View>
+            {(['examination', 'medication', 'surgery', 'injection', 'other'] as ExpenseType[]).map(t => (
+              <View
+                key={t}
+                className={`${styles.filterTab} ${expenseFilter === t ? styles.active : ''}`}
+                onClick={() => setExpenseFilter(t)}
+              >
+                {typeLabels[t]}
+              </View>
+            ))}
+          </View>
+
           <View className={styles.sectionHeader}>
-            <Text className={styles.sectionTitle}>费用明细</Text>
-            <Button 
+            <Text className={styles.sectionTitle}>
+              费用明细（{filteredExpenses.length}条）
+            </Text>
+            <Button
               className={styles.addBtn}
               onClick={handleAddExpense}
             >
               + 记账
             </Button>
           </View>
-          
+
           <View className={styles.expenseList}>
-            {expenses.slice(0, 5).map(expense => (
+            {filteredExpenses.slice(0, 5).map(expense => (
               <View 
                 key={expense.id}
                 className={styles.expenseItem}
