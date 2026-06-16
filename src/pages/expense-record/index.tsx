@@ -1,8 +1,9 @@
 import React, { useState, useMemo, useCallback } from 'react';
 import { View, Text, Button, Input, Textarea, Image } from '@tarojs/components';
-import Taro from '@tarojs/taro';
+import Taro, { useDidShow } from '@tarojs/taro';
 import type { ExpenseType, ExpenseRecord } from '@/types/ivf';
-import { expenseRecords, expenseSummary } from '@/data/medical';
+import { expenseRecords as defaultExpenses, expenseSummary } from '@/data/medical';
+import { storage } from '@/utils/storage';
 import { formatDate } from '@/utils/date';
 import styles from './index.module.scss';
 
@@ -30,8 +31,18 @@ const ExpenseRecordPage: React.FC = () => {
   const [description, setDescription] = useState<string>('');
   const [hospital, setHospital] = useState<string>('');
   const [receiptImage, setReceiptImage] = useState<string[]>([]);
-  const [records, setRecords] = useState<ExpenseRecord[]>(expenseRecords);
+  const [records, setRecords] = useState<ExpenseRecord[]>(() =>
+    storage.getExpenses<ExpenseRecord[]>(defaultExpenses)
+  );
   const [activeFilter, setActiveFilter] = useState<string>('all');
+
+  const refreshRecords = useCallback(() => {
+    setRecords(storage.getExpenses<ExpenseRecord[]>(defaultExpenses));
+  }, []);
+
+  useDidShow(() => {
+    refreshRecords();
+  });
 
   const totalSummary = useMemo(() => {
     const total = records.reduce((sum, r) => sum + r.amount, 0);
@@ -84,7 +95,9 @@ const ExpenseRecordPage: React.FC = () => {
       receiptImage: receiptImage[0]
     };
 
-    setRecords(prev => [newRecord, ...prev]);
+    const updated = [newRecord, ...records];
+    setRecords(updated);
+    storage.setExpenses(updated);
 
     Taro.showToast({ title: '记录成功', icon: 'success' });
 
@@ -93,7 +106,7 @@ const ExpenseRecordPage: React.FC = () => {
     setDescription('');
     setHospital('');
     setReceiptImage([]);
-  }, [type, amount, description, hospital, receiptImage, today]);
+  }, [type, amount, description, hospital, receiptImage, today, records]);
 
   const handlePreviewImage = useCallback((url: string) => {
     Taro.previewImage({

@@ -1,16 +1,17 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import { View, Text, ScrollView, Button, Image } from '@tarojs/components';
 import Taro from '@tarojs/taro';
-import { usePullDownRefresh } from '@tarojs/taro';
+import { usePullDownRefresh, useDidShow } from '@tarojs/taro';
 import MedicationCard from '@/components/MedicationCard';
 import type { Medication, Examination, MedicalDocument, ExpenseRecord } from '@/types/ivf';
 import { 
-  medications, 
+  medications as defaultMedications, 
   examinations, 
-  medicalDocuments, 
-  expenseRecords, 
+  medicalDocuments as defaultDocuments, 
+  expenseRecords as defaultExpenses, 
   expenseSummary 
 } from '@/data/medical';
+import { storage } from '@/utils/storage';
 import { getRelativeDate } from '@/utils/date';
 import styles from './index.module.scss';
 
@@ -47,39 +48,64 @@ const typeColors: Record<string, string> = {
 
 const MedicalPage: React.FC = () => {
   const [activeTab, setActiveTab] = useState('medication');
-  const [meds, setMeds] = useState<Medication[]>(medications);
+  const [meds, setMeds] = useState<Medication[]>(() =>
+    storage.getMedications<Medication[]>(defaultMedications)
+  );
   const [exams, setExams] = useState<Examination[]>(examinations);
-  const [docs, setDocs] = useState<MedicalDocument[]>(medicalDocuments);
-  const [expenses, setExpenses] = useState<ExpenseRecord[]>(expenseRecords);
-  
+  const [docs, setDocs] = useState<MedicalDocument[]>(() =>
+    storage.getDocuments<MedicalDocument[]>(defaultDocuments)
+  );
+  const [expenses, setExpenses] = useState<ExpenseRecord[]>(() =>
+    storage.getExpenses<ExpenseRecord[]>(defaultExpenses)
+  );
+
+  const refreshData = useCallback(() => {
+    setMeds(storage.getMedications<Medication[]>(defaultMedications));
+    setDocs(storage.getDocuments<MedicalDocument[]>(defaultDocuments));
+    setExpenses(storage.getExpenses<ExpenseRecord[]>(defaultExpenses));
+  }, []);
+
+  useDidShow(() => {
+    refreshData();
+  });
+
   usePullDownRefresh(() => {
+    refreshData();
     setTimeout(() => {
       Taro.stopPullDownRefresh();
       Taro.showToast({ title: '刷新成功', icon: 'success' });
-    }, 1000);
+    }, 500);
   });
-  
-  const handleCheckIn = (id: string) => {
-    setMeds(prev => prev.map(med => {
-      if (med.id === id) {
-        const today = new Date().toISOString().split('T')[0];
-        const now = new Date().toTimeString().slice(0, 5);
-        return {
-          ...med,
-          checkInHistory: [
-            ...med.checkInHistory,
-            { date: today, time: now, completed: true }
-          ]
-        };
-      }
-      return med;
-    }));
-    console.log('[Medical] Medication check-in:', id);
-  };
-  
-  const handleMedicationClick = (id: string) => {
+
+  const handleCheckIn = useCallback((id: string) => {
+    setMeds(prev => {
+      const updated = prev.map(med => {
+        if (med.id === id) {
+          const today = new Date().toISOString().split('T')[0];
+          const now = new Date().toTimeString().slice(0, 5);
+          return {
+            ...med,
+            checkInHistory: [
+              ...med.checkInHistory,
+              { date: today, time: now, completed: true }
+            ]
+          };
+        }
+        return med;
+      });
+      storage.setMedications(updated);
+      return updated;
+    });
+    Taro.showToast({ title: '打卡成功', icon: 'success' });
+  }, []);
+
+  const handleAddMedication = useCallback(() => {
+    Taro.navigateTo({ url: '/pages/medication-add/index' });
+  }, []);
+
+  const handleMedicationClick = useCallback((id: string) => {
     Taro.navigateTo({ url: `/pages/medication-detail/index?id=${id}` });
-  };
+  }, []);
   
   const handleExaminationClick = (id: string) => {
     Taro.navigateTo({ url: `/pages/examination-detail/index?id=${id}` });
@@ -129,9 +155,9 @@ const MedicalPage: React.FC = () => {
         <View className={styles.medicationsSection}>
           <View className={styles.sectionHeader}>
             <Text className={styles.sectionTitle}>当前用药</Text>
-            <Button 
+            <Button
               className={styles.addBtn}
-              onClick={() => Taro.navigateTo({ url: '/pages/medication-detail/index' })}
+              onClick={handleAddMedication}
             >
               + 添加
             </Button>

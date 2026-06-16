@@ -1,8 +1,9 @@
 import React, { useState, useMemo, useCallback } from 'react';
 import { View, Text, Button, Textarea, Image } from '@tarojs/components';
-import Taro from '@tarojs/taro';
+import Taro, { useDidShow } from '@tarojs/taro';
 import type { QuestionCard } from '@/types/ivf';
-import { questionCards } from '@/data/health';
+import { questionCards as defaultQuestions } from '@/data/health';
+import { storage } from '@/utils/storage';
 import { formatDate } from '@/utils/date';
 import styles from './index.module.scss';
 
@@ -35,8 +36,18 @@ const QuestionAskPage: React.FC = () => {
   const [category, setCategory] = useState<string>('');
   const [question, setQuestion] = useState<string>('');
   const [images, setImages] = useState<string[]>([]);
-  const [questions, setQuestions] = useState<QuestionCard[]>(questionCards);
+  const [questions, setQuestions] = useState<QuestionCard[]>(() =>
+    storage.getQuestions<QuestionCard[]>(defaultQuestions)
+  );
   const [activeFilter, setActiveFilter] = useState<string>('all');
+
+  const refreshQuestions = useCallback(() => {
+    setQuestions(storage.getQuestions<QuestionCard[]>(defaultQuestions));
+  }, []);
+
+  useDidShow(() => {
+    refreshQuestions();
+  });
 
   const stats = useMemo(() => {
     const pending = questions.filter(q => q.status === 'pending').length;
@@ -81,17 +92,20 @@ const QuestionAskPage: React.FC = () => {
       question: question.trim(),
       createDate: today,
       status: 'pending',
-      category
+      category,
+      images: images.length > 0 ? [...images] : undefined
     };
 
-    setQuestions(prev => [newQuestion, ...prev]);
+    const updated = [newQuestion, ...questions];
+    setQuestions(updated);
+    storage.setQuestions(updated);
 
     Taro.showToast({ title: '提交成功，医生会尽快回复', icon: 'success' });
 
     setCategory('');
     setQuestion('');
     setImages([]);
-  }, [category, question, today]);
+  }, [category, question, today, images, questions]);
 
   const handlePreviewImage = useCallback((url: string, allImages: string[]) => {
     Taro.previewImage({
@@ -203,6 +217,19 @@ const QuestionAskPage: React.FC = () => {
                   </View>
                 </View>
                 <Text className={styles.questionContent}>{q.question}</Text>
+                {q.images && q.images.length > 0 && (
+                  <View className={styles.questionImages}>
+                    {q.images.map((img, idx) => (
+                      <Image
+                        key={idx}
+                        className={styles.questionImage}
+                        src={img}
+                        mode="aspectFill"
+                        onClick={() => handlePreviewImage(img, q.images!)}
+                      />
+                    ))}
+                  </View>
+                )}
                 <Text className={styles.questionDate}>{q.createDate}</Text>
                 {q.answer && (
                   <View className={styles.answerSection}>

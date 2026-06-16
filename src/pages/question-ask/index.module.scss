@@ -264,6 +264,24 @@
   margin-bottom: $spacing-sm;
 }
 
+.questionImages {
+  display: flex;
+  flex-wrap: wrap;
+  gap: $spacing-sm;
+  margin-bottom: $spacing-sm;
+}
+
+.questionImage {
+  width: 200rpx;
+  height: 200rpx;
+  border-radius: $radius-sm;
+  object-fit: cover;
+
+  &:active {
+    opacity: 0.8;
+  }
+}
+
 .questionDate {
   font-size: $font-size-sm;
   color: $color-text-tertiary;

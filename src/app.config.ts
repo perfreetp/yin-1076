@@ -6,6 +6,7 @@ export default defineAppConfig({
     'pages/health/index',
     'pages/message/index',
     'pages/medication-detail/index',
+    'pages/medication-add/index',
     'pages/examination-detail/index',
     'pages/symptom-record/index',
     'pages/pregnancy-test/index',

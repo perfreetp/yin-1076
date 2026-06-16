@@ -155,6 +155,7 @@ export interface QuestionCard {
   createDate: string;
   status: 'pending' | 'answered' | 'archived';
   category: string;
+  images?: string[];
 }
 
 // 异常标记
@@ -167,6 +168,7 @@ export interface AbnormalFlag {
   notified: boolean;
   status: 'pending' | 'resolved' | 'monitoring';
   suggestion?: string;
+  images?: string[];
 }
 
 // 身体指标

@@ -1,8 +1,9 @@
 import React, { useState, useMemo, useCallback } from 'react';
-import { View, Text, Textarea } from '@tarojs/components';
-import Taro from '@tarojs/taro';
+import { View, Text, Textarea, Image } from '@tarojs/components';
+import Taro, { useDidShow } from '@tarojs/taro';
 import type { AbnormalFlag, SymptomSeverity } from '@/types/ivf';
-import { abnormalFlags, abnormalTypes } from '@/data/health';
+import { abnormalFlags as defaultFlags, abnormalTypes } from '@/data/health';
+import { storage } from '@/utils/storage';
 import { formatDate } from '@/utils/date';
 import styles from './index.module.scss';
 
@@ -32,8 +33,19 @@ const AbnormalFlagPage: React.FC = () => {
   const [severity, setSeverity] = useState<SymptomSeverity | undefined>(undefined);
   const [description, setDescription] = useState<string>('');
   const [notifyDoctor, setNotifyDoctor] = useState<boolean>(true);
-  const [flags, setFlags] = useState<AbnormalFlag[]>(abnormalFlags);
+  const [images, setImages] = useState<string[]>([]);
+  const [flags, setFlags] = useState<AbnormalFlag[]>(() =>
+    storage.getAbnormalFlags<AbnormalFlag[]>(defaultFlags)
+  );
   const [activeFilter, setActiveFilter] = useState<string>('all');
+
+  const refreshFlags = useCallback(() => {
+    setFlags(storage.getAbnormalFlags<AbnormalFlag[]>(defaultFlags));
+  }, []);
+
+  useDidShow(() => {
+    refreshFlags();
+  });
 
   const stats = useMemo(() => {
     const pending = flags.filter(f => f.status === 'pending').length;
@@ -60,6 +72,26 @@ const AbnormalFlagPage: React.FC = () => {
           });
         }
       }
+    });
+  }, []);
+
+  const handleChooseImage = useCallback(() => {
+    Taro.chooseImage({
+      count: 3 - images.length,
+      success: (res) => {
+        setImages(prev => [...prev, ...res.tempFilePaths]);
+      }
+    });
+  }, [images.length]);
+
+  const handleRemoveImage = useCallback((index: number) => {
+    setImages(prev => prev.filter((_, i) => i !== index));
+  }, []);
+
+  const handlePreviewImage = useCallback((url: string, allImages: string[]) => {
+    Taro.previewImage({
+      urls: allImages,
+      current: url
     });
   }, []);
 
@@ -98,10 +130,13 @@ const AbnormalFlagPage: React.FC = () => {
       description: description.trim(),
       severity,
       notified: notifyDoctor,
-      status: 'pending'
+      status: 'pending',
+      images: images.length > 0 ? [...images] : undefined
     };
 
-    setFlags(prev => [newFlag, ...prev]);
+    const updated = [newFlag, ...flags];
+    setFlags(updated);
+    storage.setAbnormalFlags(updated);
 
     Taro.showToast({
       title: notifyDoctor ? '已提交，医生会尽快回复' : '记录成功',
@@ -112,7 +147,8 @@ const AbnormalFlagPage: React.FC = () => {
     setSeverity(undefined);
     setDescription('');
     setNotifyDoctor(true);
-  }, [type, severity, description, notifyDoctor, today]);
+    setImages([]);
+  }, [type, severity, description, notifyDoctor, today, images, flags]);
 
   return (
     <View className={styles.pageContainer}>
@@ -181,6 +217,31 @@ const AbnormalFlagPage: React.FC = () => {
         </View>
 
         <View className={styles.formGroup}>
+          <Text className={styles.formLabel}>相关照片（选填，最多3张）</Text>
+          <View className={styles.uploadSection}>
+            {images.map((img, index) => (
+              <View key={index} className={styles.uploadItem}>
+                <Image
+                  className={styles.uploadImage}
+                  src={img}
+                  mode="aspectFill"
+                  onClick={() => handlePreviewImage(img, images)}
+                />
+                <View className={styles.removeBtn} onClick={() => handleRemoveImage(index)}>
+                  ✕
+                </View>
+              </View>
+            ))}
+            {images.length < 3 && (
+              <View className={styles.uploadBtn} onClick={handleChooseImage}>
+                <Text className={styles.uploadIcon}>+</Text>
+                <Text className={styles.uploadText}>上传照片</Text>
+              </View>
+            )}
+          </View>
+        </View>
+
+        <View className={styles.formGroup}>
           <View className={styles.notifyOption}>
             <View className={styles.notifyInfo}>
               <Text className={styles.notifyLabel}>通知医生</Text>
@@ -230,6 +291,19 @@ const AbnormalFlagPage: React.FC = () => {
                 </View>
                 <Text className={styles.flagDate}>{flag.createDate}</Text>
                 <Text className={styles.flagDescription}>{flag.description}</Text>
+                {flag.images && flag.images.length > 0 && (
+                  <View className={styles.flagImages}>
+                    {flag.images.map((img, idx) => (
+                      <Image
+                        key={idx}
+                        className={styles.flagImage}
+                        src={img}
+                        mode="aspectFill"
+                        onClick={() => handlePreviewImage(img, flag.images!)}
+                      />
+                    ))}
+                  </View>
+                )}
                 <View className={styles.flagStatus}>
                   <View className={`${styles.statusDot} ${styles[statusLabels[flag.status].class]}`} />
                   <Text className={`${styles.statusText} ${styles[statusLabels[flag.status].class]}`}>

@@ -1,7 +1,9 @@
-import React, { useState, useMemo, useCallback } from 'react';
+import React, { useState, useMemo, useCallback, useEffect } from 'react';
 import { View, Text, Button } from '@tarojs/components';
-import Taro, { useRouter } from '@tarojs/taro';
-import { medications } from '@/data/medical';
+import Taro, { useRouter, useDidShow } from '@tarojs/taro';
+import type { Medication } from '@/types/ivf';
+import { medications as defaultMedications } from '@/data/medical';
+import { storage } from '@/utils/storage';
 import { formatDate, daysBetween, getRelativeDate } from '@/utils/date';
 import styles from './index.module.scss';
 
@@ -48,8 +50,18 @@ const MedicationDetailPage: React.FC = () => {
   const router = useRouter();
   const medId = router.params.id;
 
-  const [medication, setMedication] = useState(() => {
-    return medications.find(m => m.id === medId) || medications[0];
+  const getMedication = useCallback((): Medication | undefined => {
+    const stored = storage.getMedications<Medication[]>(defaultMedications);
+    return stored.find(m => m.id === medId);
+  }, [medId]);
+
+  const [medication, setMedication] = useState<Medication | undefined>(getMedication());
+
+  useDidShow(() => {
+    const med = getMedication();
+    if (med) {
+      setMedication(med);
+    }
   });
 
   const today = formatDate(new Date());
@@ -83,19 +95,31 @@ const MedicationDetailPage: React.FC = () => {
   }, [medication, today]);
 
   const handleCheckIn = useCallback((timeSlot: string) => {
+    if (!medication) return;
     const now = new Date();
     const checkInTime = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
-    
-    setMedication(prev => ({
-      ...prev,
+
+    const updated = {
+      ...medication,
       checkInHistory: [
-        ...prev.checkInHistory,
+        ...medication.checkInHistory,
         { date: today, time: checkInTime, completed: true }
       ]
-    }));
-    
+    };
+    setMedication(updated);
+
+    const storedMeds = storage.getMedications<Medication[]>(defaultMedications);
+    const updatedMeds = storedMeds.map(m => m.id === medication.id ? updated : m);
+    storage.setMedications(updatedMeds);
+
     Taro.showToast({ title: '打卡成功', icon: 'success' });
-  }, [today]);
+  }, [medication, today]);
+
+  const handleEdit = useCallback(() => {
+    if (medication) {
+      Taro.navigateTo({ url: `/pages/medication-add/index?id=${medication.id}` });
+    }
+  }, [medication]);
 
   const handleSetReminder = () => {
     Taro.showToast({ title: '提醒设置已保存', icon: 'success' });
@@ -108,8 +132,13 @@ const MedicationDetailPage: React.FC = () => {
   return (
     <View className={styles.pageContainer}>
       <View className={styles.headerCard}>
-        <View className={styles.medicationType}>
-          {typeIcons[medication.type]} {typeLabels[medication.type]}
+        <View className={styles.headerTop}>
+          <View className={styles.medicationType}>
+            {typeIcons[medication.type]} {typeLabels[medication.type]}
+          </View>
+          <View className={styles.editBtn} onClick={handleEdit}>
+            编辑
+          </View>
         </View>
         <Text className={styles.medicationName}>{medication.name}</Text>
         <Text className={styles.medicationDosage}>{medication.dosage} · {medication.frequency}</Text>

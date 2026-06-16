@@ -185,6 +185,82 @@
   margin-top: $spacing-xs;
 }
 
+.uploadSection {
+  display: flex;
+  flex-wrap: wrap;
+  gap: $spacing-sm;
+}
+
+.uploadItem {
+  position: relative;
+  width: 200rpx;
+  height: 200rpx;
+}
+
+.uploadImage {
+  width: 100%;
+  height: 100%;
+  border-radius: $radius-md;
+  object-fit: cover;
+}
+
+.removeBtn {
+  position: absolute;
+  top: -12rpx;
+  right: -12rpx;
+  width: 40rpx;
+  height: 40rpx;
+  background: rgba(0, 0, 0, 0.6);
+  color: $color-text-white;
+  border-radius: 50%;
+  @include flex-center;
+  font-size: 24rpx;
+}
+
+.uploadBtn {
+  width: 200rpx;
+  height: 200rpx;
+  background: $color-bg-page;
+  border: 2rpx dashed $color-border;
+  border-radius: $radius-md;
+  @include flex-center;
+  flex-direction: column;
+
+  .uploadIcon {
+    font-size: 56rpx;
+    color: $color-text-placeholder;
+    line-height: 1;
+    margin-bottom: $spacing-xs;
+  }
+
+  .uploadText {
+    font-size: $font-size-sm;
+    color: $color-text-placeholder;
+  }
+
+  &:active {
+    opacity: 0.8;
+  }
+}
+
+.flagImages {
+  display: flex;
+  flex-wrap: wrap;
+  gap: $spacing-sm;
+  margin: $spacing-sm 0;
+}
+
+.flagImage {
+  width: 200rpx;
+  height: 200rpx;
+  border-radius: $radius-sm;
+  object-fit: cover;
+
+  &:active {
+    opacity: 0.8;
+  }
+}
+
 .notifyOption {
   display: flex;
   align-items: center;

@@ -1,8 +1,9 @@
 import React, { useState, useMemo, useCallback } from 'react';
 import { View, Text, Button, Input, Textarea, Image } from '@tarojs/components';
-import Taro from '@tarojs/taro';
-import type { PregnancyResult } from '@/types/ivf';
-import { pregnancyTests } from '@/data/health';
+import Taro, { useDidShow } from '@tarojs/taro';
+import type { PregnancyResult, PregnancyTest } from '@/types/ivf';
+import { pregnancyTests as defaultPregnancyTests } from '@/data/health';
+import { storage } from '@/utils/storage';
 import { formatDate, daysBetween } from '@/utils/date';
 import styles from './index.module.scss';
 
@@ -16,12 +17,22 @@ const resultOptions = [
 const PregnancyTestPage: React.FC = () => {
   const today = formatDate(new Date());
   const transferDate = '2026-06-25';
-  
+
   const [result, setResult] = useState<PregnancyResult | undefined>(undefined);
   const [hcgValue, setHcgValue] = useState<string>('');
   const [note, setNote] = useState<string>('');
   const [images, setImages] = useState<string[]>([]);
-  const [records, setRecords] = useState(pregnancyTests);
+  const [records, setRecords] = useState<PregnancyTest[]>(() =>
+    storage.getPregnancyTests<PregnancyTest[]>(defaultPregnancyTests)
+  );
+
+  const refreshRecords = useCallback(() => {
+    setRecords(storage.getPregnancyTests<PregnancyTest[]>(defaultPregnancyTests));
+  }, []);
+
+  useDidShow(() => {
+    refreshRecords();
+  });
 
   const daysToTest = useMemo(() => {
     const testDate = new Date(transferDate);
@@ -52,7 +63,7 @@ const PregnancyTestPage: React.FC = () => {
       return;
     }
 
-    const newRecord = {
+    const newRecord: PregnancyTest = {
       id: `pt-${Date.now()}`,
       date: today,
       result,
@@ -62,15 +73,17 @@ const PregnancyTestPage: React.FC = () => {
       daysAfterTransfer: Math.max(0, daysAfterTransfer)
     };
 
-    setRecords(prev => [newRecord, ...prev]);
-    
+    const updated = [newRecord, ...records];
+    setRecords(updated);
+    storage.setPregnancyTests(updated);
+
     Taro.showToast({ title: '记录成功', icon: 'success' });
-    
+
     setResult(undefined);
     setHcgValue('');
     setNote('');
     setImages([]);
-  }, [result, hcgValue, note, images, today, daysAfterTransfer]);
+  }, [result, hcgValue, note, images, today, daysAfterTransfer, records]);
 
   const handlePreviewImage = useCallback((url: string) => {
     Taro.previewImage({

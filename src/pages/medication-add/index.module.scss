@@ -1,0 +1,306 @@
+@use '@/styles/variables.scss' as *;
+
+.pageContainer {
+  padding: $spacing-lg $page-padding;
+  padding-bottom: calc(env(safe-area-inset-bottom) + 120rpx);
+}
+
+.formCard {
+  @include ivf-card;
+  margin-bottom: $spacing-lg;
+}
+
+.sectionTitle {
+  font-size: $font-size-lg;
+  font-weight: $font-weight-semibold;
+  color: $color-text-primary;
+  margin-bottom: $spacing-lg;
+}
+
+.formGroup {
+  margin-bottom: $spacing-lg;
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+}
+
+.formLabel {
+  font-size: $font-size-md;
+  color: $color-text-secondary;
+  margin-bottom: $spacing-sm;
+  display: block;
+
+  .required {
+    color: $color-error;
+    margin-right: 4rpx;
+  }
+}
+
+.formInput {
+  width: 100%;
+  height: 88rpx;
+  padding: 0 $spacing-md;
+  background: $color-bg-page;
+  border-radius: $radius-md;
+  font-size: $font-size-md;
+  color: $color-text-primary;
+
+  &::placeholder {
+    color: $color-text-placeholder;
+  }
+}
+
+.formTextarea {
+  width: 100%;
+  min-height: 160rpx;
+  padding: $spacing-md;
+  background: $color-bg-page;
+  border-radius: $radius-md;
+  font-size: $font-size-md;
+  color: $color-text-primary;
+  line-height: $line-height-normal;
+
+  &::placeholder {
+    color: $color-text-placeholder;
+  }
+}
+
+.typeOptions {
+  display: flex;
+  gap: $spacing-sm;
+}
+
+.typeOption {
+  flex: 1;
+  padding: $spacing-md;
+  background: $color-bg-page;
+  border-radius: $radius-md;
+  border: 2rpx solid transparent;
+  text-align: center;
+  transition: all $transition-fast;
+
+  .typeIcon {
+    font-size: 40rpx;
+    margin-bottom: $spacing-xs;
+    display: block;
+  }
+
+  .typeLabel {
+    font-size: $font-size-sm;
+    color: $color-text-secondary;
+  }
+
+  &.selected {
+    border-color: $color-primary;
+    background: rgba(255, 107, 157, 0.05);
+
+    .typeLabel {
+      color: $color-primary;
+      font-weight: $font-weight-medium;
+    }
+  }
+
+  &:active {
+    transform: scale(0.98);
+  }
+}
+
+.frequencyOptions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: $spacing-sm;
+}
+
+.frequencyOption {
+  padding: $spacing-sm $spacing-lg;
+  background: $color-bg-page;
+  border-radius: $radius-round;
+  border: 2rpx solid transparent;
+  font-size: $font-size-sm;
+  color: $color-text-secondary;
+  transition: all $transition-fast;
+
+  &.selected {
+    border-color: $color-primary;
+    background: rgba(255, 107, 157, 0.05);
+    color: $color-primary;
+    font-weight: $font-weight-medium;
+  }
+
+  &:active {
+    transform: scale(0.96);
+  }
+}
+
+.timeSlotsSection {
+  .timeSlotsList {
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-sm;
+    margin-bottom: $spacing-md;
+  }
+
+  .timeSlotItem {
+    display: flex;
+    align-items: center;
+    gap: $spacing-sm;
+    padding: $spacing-sm $spacing-md;
+    background: $color-bg-page;
+    border-radius: $radius-md;
+
+    .timeInput {
+      flex: 1;
+      height: 64rpx;
+      background: transparent;
+      font-size: $font-size-md;
+      color: $color-text-primary;
+      border: none;
+      padding: 0;
+    }
+
+    .removeTimeBtn {
+      width: 48rpx;
+      height: 48rpx;
+      @include flex-center;
+      font-size: $font-size-lg;
+      color: $color-text-tertiary;
+      border-radius: 50%;
+      transition: all $transition-fast;
+
+      &:active {
+        background: $color-bg-hover;
+        color: $color-error;
+      }
+    }
+  }
+
+  .addTimeBtn {
+    padding: $spacing-sm $spacing-md;
+    background: $color-bg-page;
+    border-radius: $radius-md;
+    border: 2rpx dashed $color-border;
+    text-align: center;
+    font-size: $font-size-sm;
+    color: $color-text-secondary;
+    transition: all $transition-fast;
+
+    &:active {
+      background: $color-bg-hover;
+      border-color: $color-primary;
+      color: $color-primary;
+    }
+  }
+}
+
+.dateRow {
+  display: flex;
+  gap: $spacing-md;
+
+  .dateItem {
+    flex: 1;
+
+    .datePicker {
+      width: 100%;
+      height: 88rpx;
+      padding: 0 $spacing-md;
+      background: $color-bg-page;
+      border-radius: $radius-md;
+      font-size: $font-size-md;
+      color: $color-text-primary;
+      display: flex;
+      align-items: center;
+
+      .datePlaceholder {
+        color: $color-text-placeholder;
+      }
+
+      .dateValue {
+        color: $color-text-primary;
+      }
+    }
+  }
+}
+
+.sideEffectsSection {
+  .sideEffectInput {
+    display: flex;
+    gap: $spacing-sm;
+    margin-bottom: $spacing-sm;
+
+    .sideEffectField {
+      flex: 1;
+      height: 64rpx;
+      padding: 0 $spacing-md;
+      background: $color-bg-page;
+      border-radius: $radius-md;
+      font-size: $font-size-sm;
+      color: $color-text-primary;
+    }
+
+    .addSideEffectBtn {
+      width: 64rpx;
+      height: 64rpx;
+      @include flex-center;
+      background: $color-primary;
+      color: $color-text-white;
+      border-radius: $radius-md;
+      font-size: $font-size-lg;
+
+      &:active {
+        opacity: 0.9;
+      }
+    }
+  }
+
+  .sideEffectTags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: $spacing-xs;
+  }
+
+  .sideEffectTag {
+    display: flex;
+    align-items: center;
+    gap: $spacing-xs;
+    padding: 6rpx 16rpx;
+    background: rgba(250, 173, 20, 0.1);
+    color: #FAAD14;
+    border-radius: $radius-sm;
+    font-size: $font-size-xs;
+
+    .removeTag {
+      font-size: $font-size-sm;
+      line-height: 1;
+    }
+  }
+}
+
+.submitBtn {
+  @include primary-button;
+  width: 100%;
+  height: $button-height-lg;
+  font-size: $font-size-lg;
+}
+
+.tipsCard {
+  @include ivf-card;
+  background: linear-gradient(135deg, rgba(255, 107, 157, 0.05) 0%, rgba(255, 159, 67, 0.05) 100%);
+  border: 2rpx solid rgba(255, 107, 157, 0.2);
+
+  .tipsTitle {
+    font-size: $font-size-md;
+    font-weight: $font-weight-semibold;
+    color: $color-primary;
+    margin-bottom: $spacing-sm;
+    display: flex;
+    align-items: center;
+    gap: $spacing-xs;
+  }
+
+  .tipsContent {
+    font-size: $font-size-sm;
+    color: $color-text-secondary;
+    line-height: $line-height-normal;
+  }
+}
